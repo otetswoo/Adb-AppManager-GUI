@@ -66,10 +66,8 @@ class AndroidAppManager(QMainWindow):
                 for entry in json.load(f):
                     if "id" in entry:
                         self.uad_info[entry["id"]] = entry
-        except FileNotFoundError:
+        except Exception:
             pass
-        except Exception as e:
-            print(f"Ошибка загрузки uad_lists.json: {e}")
 
     def setup_ui(self):
         device_layout = QHBoxLayout()
@@ -77,12 +75,12 @@ class AndroidAppManager(QMainWindow):
         self.device_combo.setMinimumWidth(200)
         self.device_combo.currentIndexChanged.connect(self.on_device_selected)
 
-        self.refresh_btn = QPushButton("Refresh Devices")
-        self.refresh_btn.clicked.connect(self.refresh_devices)
+        self.refresh_devices_btn = QPushButton("Refresh Devices")
+        self.refresh_devices_btn.clicked.connect(self.refresh_devices)
 
         device_layout.addWidget(QLabel("Select Device: "))
         device_layout.addWidget(self.device_combo)
-        device_layout.addWidget(self.refresh_btn)
+        device_layout.addWidget(self.refresh_devices_btn)
         device_layout.addStretch()
         self.main_layout.addLayout(device_layout)
 
@@ -115,16 +113,19 @@ class AndroidAppManager(QMainWindow):
         self.clear_app_desc()
 
         action_layout = QHBoxLayout()
+        self.refresh_apps_btn = QPushButton("Refresh Apps")
         self.install_apk_btn = QPushButton("Install APK")
         self.enable_btn = QPushButton("Enable")
         self.disable_btn = QPushButton("Disable")
         self.uninstall_btn = QPushButton("Uninstall")
 
+        self.refresh_apps_btn.clicked.connect(self.refresh_apps)
         self.install_apk_btn.clicked.connect(self.install_apk)
         self.enable_btn.clicked.connect(lambda: self.change_app_state("enable"))
         self.disable_btn.clicked.connect(lambda: self.change_app_state("disable"))
         self.uninstall_btn.clicked.connect(self.uninstall_app)
 
+        action_layout.addWidget(self.refresh_apps_btn)
         action_layout.addWidget(self.install_apk_btn)
         action_layout.addWidget(self.enable_btn)
         action_layout.addWidget(self.disable_btn)
@@ -134,9 +135,6 @@ class AndroidAppManager(QMainWindow):
     def on_device_selected(self, index):
         if index == -1:
             return
-        self.all_apps.clear()
-        self.app_table.setRowCount(0)
-        self.app_table.clearContents()
         self.clear_app_desc()
         self.load_device_info()
         self.load_all_apps()
@@ -181,12 +179,7 @@ class AndroidAppManager(QMainWindow):
 
     @pyqtSlot(str)
     def _handle_devices(self, output):
-        devices = []
-        for line in output.strip().splitlines()[1:]:
-            parts = line.split()
-            if len(parts) >= 2 and parts[1] == "device":
-                devices.append(parts[0])
-
+        devices = [line.split()[0] for line in output.strip().splitlines()[1:] if line.strip().endswith("device")]
         self.device_combo.addItems(devices)
         if devices:
             self.device_combo.setCurrentIndex(0)
@@ -201,50 +194,58 @@ class AndroidAppManager(QMainWindow):
         info = {}
         for line in output.splitlines():
             if "]:" in line:
-                key, value = line.split("]:", 1)
-                info[key.strip("[] ")] = value.strip("[] ")
+                k, v = line.split("]:", 1)
+                info[k.strip("[] ")] = v.strip("[] ")
 
         model = info.get("ro.product.model", "Unknown")
-        version = info.get("ro.build.version.release", "Unknown")
+        ver = info.get("ro.build.version.release", "Unknown")
         sdk = info.get("ro.build.version.sdk", "Unknown")
-        self.device_info_label.setText(f"Model: {model} | Android: {version} | API: {sdk}")
+        self.device_info_label.setText(f"Model: {model} | Android: {ver} | API: {sdk}")
+
+    def refresh_apps(self):
+        device = self.device_combo.currentText()
+        if not device:
+            QMessageBox.warning(self, "Ошибка", "Не выбрано устройство")
+            return
+        self.load_all_apps()
 
     def load_all_apps(self):
         device = self.device_combo.currentText()
         if not device:
             return
-
         self.temp_packages = []
+        self.all_apps = []
+        self.app_table.setRowCount(0)
+        self.app_table.clearContents()
         self.run_adb_command(f"adb -s {device} shell pm list packages -f", self._handle_installed_packages)
 
     @pyqtSlot(str)
     def _handle_installed_packages(self, output):
-        current_device = self.device_combo.currentText()
-        if not current_device:
+        if not self.device_combo.currentText():
             return
-
         self.temp_packages = []
         for line in output.strip().splitlines():
+            line = line.strip()
             if "=" in line:
                 try:
                     path, pkg = line.split("=", 1)
                     self.temp_packages.append((pkg, path))
                 except ValueError:
                     continue
-
-        self.run_adb_command(f"adb -s {current_device} shell pm list packages -d", self._handle_disabled_packages)
+        device = self.device_combo.currentText()
+        if device:
+            self.run_adb_command(f"adb -s {device} shell pm list packages -d", self._handle_disabled_packages)
 
     @pyqtSlot(str)
     def _handle_disabled_packages(self, output):
         disabled = {line.split(":", 1)[1] for line in output.strip().splitlines() if line.startswith("package:")}
         self.all_apps = []
-
         for pkg, path in self.temp_packages:
             app_name = pkg.split(".")[-1]
             status = "Disabled" if pkg in disabled else "Enabled"
-            app_type = "System" if any(p in path for p in ["/system/", "/product/", "/vendor/", "/system_ext/"]) else "User"
+            is_system = any(p in path for p in ["/system/", "/product/", "/vendor/", "/system_ext/", "/oem/"])
+            app_type = "System" if is_system else "User"
             self.all_apps.append((app_name, pkg, status, app_type))
-
         self.display_apps(self.all_apps)
 
     def display_apps(self, apps):
@@ -274,13 +275,10 @@ class AndroidAppManager(QMainWindow):
         if not device:
             QMessageBox.warning(self, "Ошибка", "Не выбрано устройство")
             return
-
         filepath, _ = QFileDialog.getOpenFileName(self, "Выберите APK", "", "APK Files (*.apk)")
         if not filepath:
             return
-
-        cmd = f'adb -s {device} install -r "{filepath}"'
-        self.run_adb_command(cmd, self._handle_install_result)
+        self.run_adb_command(f'adb -s {device} install -r "{filepath}"', self._handle_install_result)
 
     @pyqtSlot(str)
     def _handle_install_result(self, output):
@@ -301,12 +299,8 @@ class AndroidAppManager(QMainWindow):
             return
 
         package = self.app_table.item(row, 1).text()
-        if action == "disable":
-            cmd = f"adb -s {device} shell pm disable-user {package}"
-        else:
-            cmd = f"adb -s {device} shell pm enable {package}"
-
-        self.run_adb_command(cmd, lambda _: QTimer.singleShot(1000, self.load_all_apps))
+        cmd = "disable-user" if action == "disable" else "enable"
+        self.run_adb_command(f"adb -s {device} shell pm {cmd} {package}", lambda _: QTimer.singleShot(1000, self.load_all_apps))
 
     def uninstall_app(self):
         device = self.device_combo.currentText()
