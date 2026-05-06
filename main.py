@@ -3,8 +3,8 @@ import os
 import subprocess
 import json
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
-    QLabel, QPushButton, QComboBox, QLineEdit, QTableWidget, 
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QLabel, QPushButton, QComboBox, QLineEdit, QTableWidget,
     QTableWidgetItem, QHeaderView, QMessageBox, QFileDialog
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer, pyqtSlot
@@ -55,7 +55,7 @@ class AndroidAppManager(QMainWindow):
         self.workers = []
         self.temp_packages = []
         self.uad_info = {}
-        
+
         self.load_uad_lists()
         self.setup_ui()
         self.refresh_devices()
@@ -76,10 +76,10 @@ class AndroidAppManager(QMainWindow):
         self.device_combo = QComboBox()
         self.device_combo.setMinimumWidth(200)
         self.device_combo.currentIndexChanged.connect(self.on_device_selected)
-        
+
         self.refresh_btn = QPushButton("Refresh Devices")
         self.refresh_btn.clicked.connect(self.refresh_devices)
-        
+
         device_layout.addWidget(QLabel("Select Device: "))
         device_layout.addWidget(self.device_combo)
         device_layout.addWidget(self.refresh_btn)
@@ -119,12 +119,12 @@ class AndroidAppManager(QMainWindow):
         self.enable_btn = QPushButton("Enable")
         self.disable_btn = QPushButton("Disable")
         self.uninstall_btn = QPushButton("Uninstall")
-        
+
         self.install_apk_btn.clicked.connect(self.install_apk)
         self.enable_btn.clicked.connect(lambda: self.change_app_state("enable"))
         self.disable_btn.clicked.connect(lambda: self.change_app_state("disable"))
         self.uninstall_btn.clicked.connect(self.uninstall_app)
-        
+
         action_layout.addWidget(self.install_apk_btn)
         action_layout.addWidget(self.enable_btn)
         action_layout.addWidget(self.disable_btn)
@@ -152,7 +152,7 @@ class AndroidAppManager(QMainWindow):
 
         package = self.app_table.item(row, 1).text()
         info = self.uad_info.get(package)
-        
+
         if not info:
             self.app_desc_label.setText(f"<b>App Description:</b><br>No information available for <code>{package}</code>.")
             return
@@ -160,18 +160,18 @@ class AndroidAppManager(QMainWindow):
         app_type = info.get("list", "Unknown")
         desc = info.get("description", "No description available.")
         removal = info.get("removal", "Recommended")
-        
+
         colors = {"Recommended": "#4CAF50", "Advanced": "#FFA500", "Expert": "#F44336"}
         color = colors.get(removal, "#aaaaaa")
         removal_text = f"<span style='color:{color};font-weight:bold;'>{removal}</span>"
-        
+
         html = f"<b>App Type:</b> {app_type}<br><b>Description:</b> {desc}<br><b>Removal:</b> {removal_text}"
         self.app_desc_label.setText(html)
 
     def run_adb_command(self, command, callback):
         worker = AdbWorker(command)
         worker.output.connect(callback)
-        worker.finished.connect(lambda w=worker: self.workers.remove(w))
+        worker.finished.connect(lambda w=worker: self.workers.remove(w) if w in self.workers else None)
         self.workers.append(worker)
         worker.start()
 
@@ -186,7 +186,7 @@ class AndroidAppManager(QMainWindow):
             parts = line.split()
             if len(parts) >= 2 and parts[1] == "device":
                 devices.append(parts[0])
-                
+
         self.device_combo.addItems(devices)
         if devices:
             self.device_combo.setCurrentIndex(0)
@@ -213,35 +213,38 @@ class AndroidAppManager(QMainWindow):
         device = self.device_combo.currentText()
         if not device:
             return
-            
+
         self.temp_packages = []
         self.run_adb_command(f"adb -s {device} shell pm list packages -f", self._handle_installed_packages)
 
     @pyqtSlot(str)
     def _handle_installed_packages(self, output):
+        current_device = self.device_combo.currentText()
+        if not current_device:
+            return
+
         self.temp_packages = []
         for line in output.strip().splitlines():
             if "=" in line:
                 try:
-                    path, pkg = line.rsplit("=", 1)
+                    path, pkg = line.split("=", 1)
                     self.temp_packages.append((pkg, path))
                 except ValueError:
                     continue
-                    
-        device = self.device_combo.currentText()
-        self.run_adb_command(f"adb -s {device} shell pm list packages -d", self._handle_disabled_packages)
+
+        self.run_adb_command(f"adb -s {current_device} shell pm list packages -d", self._handle_disabled_packages)
 
     @pyqtSlot(str)
     def _handle_disabled_packages(self, output):
         disabled = {line.split(":", 1)[1] for line in output.strip().splitlines() if line.startswith("package:")}
         self.all_apps = []
-        
+
         for pkg, path in self.temp_packages:
             app_name = pkg.split(".")[-1]
             status = "Disabled" if pkg in disabled else "Enabled"
-            app_type = "System" if any(p in path for p in ["/system/", "/product/", "/vendor/"]) else "User"
+            app_type = "System" if any(p in path for p in ["/system/", "/product/", "/vendor/", "/system_ext/"]) else "User"
             self.all_apps.append((app_name, pkg, status, app_type))
-            
+
         self.display_apps(self.all_apps)
 
     def display_apps(self, apps):
@@ -253,7 +256,7 @@ class AndroidAppManager(QMainWindow):
             self.app_table.setItem(row, 1, QTableWidgetItem(pkg))
             self.app_table.setItem(row, 2, QTableWidgetItem(status))
             self.app_table.setItem(row, 3, QTableWidgetItem(app_type))
-            
+
             color = QColor(244, 67, 54) if status == "Disabled" else QColor(76, 175, 80)
             for col in range(4):
                 self.app_table.item(row, col).setBackground(color)
@@ -298,8 +301,12 @@ class AndroidAppManager(QMainWindow):
             return
 
         package = self.app_table.item(row, 1).text()
-        cmd = "disable-user" if action == "disable" else "enable"
-        self.run_adb_command(f"adb -s {device} shell pm {cmd} {package}", lambda _: QTimer.singleShot(1000, self.load_all_apps))
+        if action == "disable":
+            cmd = f"adb -s {device} shell pm disable-user {package}"
+        else:
+            cmd = f"adb -s {device} shell pm enable {package}"
+
+        self.run_adb_command(cmd, lambda _: QTimer.singleShot(1000, self.load_all_apps))
 
     def uninstall_app(self):
         device = self.device_combo.currentText()
