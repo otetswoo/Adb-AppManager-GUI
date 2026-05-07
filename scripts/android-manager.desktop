@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Android App Manager
+Comment=Manage Android applications via ADB
+Exec=android-manager
+Icon=android-manager
+Terminal=false
+Type=Application
+Categories=System;Qt;
+Keywords=android;adb;manager;apps;

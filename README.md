@@ -1,5 +1,33 @@
 # Android App Manager
 
+GUI приложение для управления Android-приложениями через ADB.
+
+## Возможности
+
+- 📱 Просмотр всех установленных приложений
+- 🔍 Поиск и фильтрация приложений
+- ⚡ Включение/отключение приложений
+- 🗑️ Удаление приложений (включая системные)
+- 📦 Установка APK-файлов
+- 📋 Пакетное отключение приложений
+- 🌓 Тёмная/светлая тема
+- 🌍 Поддержка русского и английского языков
+- 📊 Интеграция с Universal Android Debloater списками
+
+## Установка
+
+### Зависимости
+- Python 3.8+
+- ADB (Android Debug Bridge)
+- PyQt5
+
+### Из исходников
+```bash
+git clone https://github.com/yourusername/android-app-manager.git
+cd android-app-manager
+pip install -r requirements.txt
+python src/android_manager/main.py
+```
 ![Preview](preview.png)
 
 Android App Manager is a Python-based GUI application that allows users to manage their Android applications via ADB (Android Debug Bridge). It provides functionality to list, search , disable, enable and uninstall applications.

@@ -1,41 +1,143 @@
 import sys
 import os
-import subprocess
 import json
+import subprocess
+from dataclasses import dataclass
 from pathlib import Path
-from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QLabel, QPushButton, QComboBox, QLineEdit, QTableWidget,
-    QTableWidgetItem, QHeaderView, QMessageBox, QFileDialog,
-    QProgressBar, QSizePolicy
-)
-from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer, pyqtSlot
-from PyQt5.QtGui import QColor
 
-os.environ["QT_QPA_PLATFORM"] = "wayland"
+from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer
+from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QComboBox,
+    QDialog,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
+
 os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "1"
 
-PM_USER = "--user 0"
-
-# ── Цвета темы ────────────────────────────────────────────────────────────────
-CLR_BG           = "#1e1e2e"
-CLR_SURFACE      = "#2a2a3e"
-CLR_SURFACE2     = "#313149"
-CLR_BORDER       = "#44445a"
-CLR_TEXT         = "#cdd6f4"
-CLR_TEXT_DIM     = "#6c7086"
-CLR_ACCENT       = "#89b4fa"
-CLR_GREEN        = "#a6e3a1"
-CLR_RED          = "#f38ba8"
-CLR_YELLOW       = "#f9e2af"
-CLR_ROW_ENABLED  = "#1e2d1e"
-CLR_ROW_DISABLED = "#2d1e1e"
+PM_USER = "--user"
+PM_USER_ID = "0"
 
 
-# ── ADB worker ────────────────────────────────────────────────────────────────
+THEMES = {
+    "dark": {
+        "bg": "#1e1e2e",
+        "surface": "#2a2a3e",
+        "surface2": "#313149",
+        "border": "#44445a",
+        "text": "#cdd6f4",
+        "text_dim": "#6c7086",
+        "accent": "#89b4fa",
+        "green": "#a6e3a1",
+        "red": "#f38ba8",
+        "row_enabled": "#1e2d1e",
+        "row_disabled": "#2d1e1e",
+    },
+    "light": {
+        "bg": "#f0f0f0",
+        "surface": "#ffffff",
+        "surface2": "#e0e0e0",
+        "border": "#cccccc",
+        "text": "#1a1a1a",
+        "text_dim": "#666666",
+        "accent": "#1a73e8",
+        "green": "#2e7d32",
+        "red": "#d32f2f",
+        "row_enabled": "#e8f5e9",
+        "row_disabled": "#ffebee",
+    },
+}
+
+
+STRINGS = {
+    "ru": {
+        "title": "Android App Manager",
+        "device_lbl": "Устройство:",
+        "refresh_dev": "Обновить",
+        "no_devices": "Нет подключённых устройств",
+        "search_ph": "Поиск пакета...",
+        "type_all": "Все типы",
+        "type_user": "Пользовательские",
+        "type_sys": "Системные",
+        "stat_en": "Включено",
+        "stat_dis": "Отключено",
+        "status_all": "Все статусы",
+        "ready": "Готово",
+        "loading_pkgs": "Загрузка приложений...",
+        "loaded_count": "Загружено: {} приложений",
+        "no_info": "Информация отсутствует",
+        "select_app_hint": "Выберите приложение",
+        "btn_refresh_apps": "Обновить список",
+        "btn_install_apk": "Установить APK",
+        "btn_batch": "Пакетное отключение",
+        "btn_enable": "Включить",
+        "btn_disable": "Выключить",
+        "btn_uninstall": "Удалить",
+        "copy_pkg": "Копировать пакет",
+        "install_ok": "APK установлен",
+        "confirm_sys": "Удаление системного приложения может повредить систему. Продолжить?",
+        "err_no_dev": "Выберите устройство",
+        "err_protected": "Пакет '{}' защищён системой",
+        "err_cmd": "Ошибка выполнения:\n{}",
+    },
+    "en": {
+        "title": "Android App Manager",
+        "device_lbl": "Device:",
+        "refresh_dev": "Refresh",
+        "no_devices": "No devices connected",
+        "search_ph": "Search package...",
+        "type_all": "All types",
+        "type_user": "User",
+        "type_sys": "System",
+        "stat_en": "Enabled",
+        "stat_dis": "Disabled",
+        "status_all": "All statuses",
+        "ready": "Ready",
+        "loading_pkgs": "Loading apps...",
+        "loaded_count": "Loaded: {} apps",
+        "no_info": "No info available",
+        "select_app_hint": "Select app",
+        "btn_refresh_apps": "Refresh list",
+        "btn_install_apk": "Install APK",
+        "btn_batch": "Batch disable",
+        "btn_enable": "Enable",
+        "btn_disable": "Disable",
+        "btn_uninstall": "Uninstall",
+        "copy_pkg": "Copy package",
+        "install_ok": "APK installed",
+        "confirm_sys": "Removing system apps may break device. Continue?",
+        "err_no_dev": "Select device",
+        "err_protected": "Package '{}' is protected",
+        "err_cmd": "Command failed:\n{}",
+    },
+}
+
+
+@dataclass
+class AppInfo:
+    package: str
+    status: str
+    app_type: str
+    path: str
+
 
 class AdbWorker(QThread):
-    output = pyqtSignal(str)
+    finished_output = pyqtSignal(str)
 
     def __init__(self, command):
         super().__init__()
@@ -44,335 +146,294 @@ class AdbWorker(QThread):
     def run(self):
         try:
             result = subprocess.run(
-                self.command, shell=True, capture_output=True,
-                text=True, timeout=30,
+                self.command,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
-            out = result.stdout
-            if result.returncode != 0 and not result.stdout:
-                out = result.stderr
-        except subprocess.TimeoutExpired:
-            out = "ERROR: timeout"
+
+            output = (result.stdout or "") + (result.stderr or "")
+            self.finished_output.emit(output.strip())
+
         except Exception as e:
-            out = f"ERROR: {e}"
-        self.output.emit(out)
+            self.finished_output.emit(f"ERROR: {e}")
 
 
-# ── Главное окно ──────────────────────────────────────────────────────────────
+class AdbClient:
+    @staticmethod
+    def run(*args):
+        return ["adb", *args]
+
 
 class AndroidAppManager(QMainWindow):
-
-    COL_PKG    = 0
-    COL_STATUS = 1
-    COL_TYPE   = 2
-
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Android App Manager")
-        self.setGeometry(100, 100, 1000, 680)
-        self._apply_stylesheet()
 
-        self.central_widget = QWidget()
-        self.setCentralWidget(self.central_widget)
-        self.main_layout = QVBoxLayout(self.central_widget)
-        self.main_layout.setSpacing(6)
-        self.main_layout.setContentsMargins(10, 10, 10, 8)
+        self.lang = "ru"
+        self.theme_mode = "dark"
 
-        self.all_apps:      list[tuple] = []
-        self.workers:       list        = []
-        self._packages_buf: dict        = {}
-        self.uad_info:      dict        = {}
+        self.all_apps = []
+        self.workers = []
+        self.uad_info = {}
+        self.packages_buffer = {}
+
+        self.search_timer = QTimer()
+        self.search_timer.setSingleShot(True)
+        self.search_timer.timeout.connect(self.apply_filters)
 
         self.load_uad_lists()
         self.setup_ui()
+        self.apply_theme()
+        self.retranslate_ui()
+
         self.refresh_devices()
 
-    # ── Стиль ─────────────────────────────────────────────────────────────────
-
-    def _apply_stylesheet(self):
-        self.setStyleSheet(f"""
-            QMainWindow, QWidget {{
-                background-color: {CLR_BG};
-                color: {CLR_TEXT};
-                font-family: 'Segoe UI', 'Inter', sans-serif;
-                font-size: 13px;
-            }}
-            QLabel {{
-                background: transparent;
-                border: none;
-                padding: 0;
-            }}
-            QPushButton {{
-                background-color: {CLR_SURFACE2};
-                color: {CLR_TEXT};
-                border: 1px solid {CLR_BORDER};
-                padding: 5px 12px;
-                border-radius: 5px;
-                min-height: 26px;
-            }}
-            QPushButton:hover   {{ background-color: #3a3a5a; border-color: {CLR_ACCENT}; }}
-            QPushButton:pressed {{ background-color: #252540; }}
-            QPushButton:disabled {{
-                background-color: {CLR_SURFACE};
-                color: {CLR_TEXT_DIM};
-                border-color: {CLR_BORDER};
-            }}
-            QPushButton#dangerBtn {{
-                border-color: {CLR_RED};
-                color: {CLR_RED};
-            }}
-            QPushButton#dangerBtn:hover {{ background-color: #3a1e1e; }}
-
-            QComboBox {{
-                background-color: {CLR_SURFACE2};
-                color: {CLR_TEXT};
-                border: 1px solid {CLR_BORDER};
-                padding: 4px 8px;
-                border-radius: 5px;
-                min-height: 26px;
-            }}
-            QComboBox::drop-down {{ border: none; width: 20px; }}
-            QComboBox QAbstractItemView {{
-                background-color: {CLR_SURFACE2};
-                color: {CLR_TEXT};
-                selection-background-color: {CLR_ACCENT};
-                selection-color: {CLR_BG};
-            }}
-
-            QLineEdit {{
-                background-color: {CLR_SURFACE2};
-                color: {CLR_TEXT};
-                border: 1px solid {CLR_BORDER};
-                padding: 4px 8px;
-                border-radius: 5px;
-                min-height: 26px;
-            }}
-            QLineEdit:focus {{ border-color: {CLR_ACCENT}; }}
-
-            QTableWidget {{
-                background-color: {CLR_SURFACE};
-                color: {CLR_TEXT};
-                gridline-color: {CLR_BORDER};
-                border: 1px solid {CLR_BORDER};
-                border-radius: 5px;
-                selection-background-color: #3a3a6a;
-                selection-color: {CLR_TEXT};
-                outline: none;
-            }}
-            QTableWidget::item {{ padding: 3px 6px; }}
-            QHeaderView::section {{
-                background-color: {CLR_SURFACE2};
-                color: {CLR_ACCENT};
-                font-weight: bold;
-                padding: 5px 6px;
-                border: none;
-                border-right: 1px solid {CLR_BORDER};
-                border-bottom: 1px solid {CLR_BORDER};
-            }}
-            QHeaderView::section:hover {{ background-color: #3a3a5a; }}
-
-            QProgressBar {{
-                background-color: {CLR_SURFACE2};
-                border: 1px solid {CLR_BORDER};
-                border-radius: 3px;
-                height: 4px;
-                text-align: center;
-            }}
-            QProgressBar::chunk {{
-                background-color: {CLR_ACCENT};
-                border-radius: 3px;
-            }}
-
-            QScrollBar:vertical {{
-                background: {CLR_SURFACE};
-                width: 8px;
-                border-radius: 4px;
-            }}
-            QScrollBar::handle:vertical {{
-                background: {CLR_BORDER};
-                border-radius: 4px;
-                min-height: 20px;
-            }}
-            QScrollBar::handle:vertical:hover {{ background: {CLR_ACCENT}; }}
-            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{ height: 0; }}
-        """)
-
-    # ── UAD ───────────────────────────────────────────────────────────────────
-
-    def load_uad_lists(self):
-        try:
-            with open("uad_lists.json", "r", encoding="utf-8") as f:
-                for entry in json.load(f):
-                    if "id" in entry:
-                        self.uad_info[entry["id"]] = entry
-        except Exception:
-            pass
-
-    # ── UI ────────────────────────────────────────────────────────────────────
-
     def setup_ui(self):
-        # ── Строка устройства ────────────────────────────────────────────────
-        dev_row = QHBoxLayout()
+        self.setWindowTitle("Android App Manager")
+        self.resize(1100, 750)
 
-        lbl_dev = QLabel("Устройство:")
-        lbl_dev.setStyleSheet(f"color: {CLR_TEXT_DIM};")
+        central = QWidget()
+        self.setCentralWidget(central)
+
+        self.main_layout = QVBoxLayout(central)
+
+        top_bar = QHBoxLayout()
+
+        self.lbl_dev = QLabel()
 
         self.device_combo = QComboBox()
-        self.device_combo.setMinimumWidth(220)
         self.device_combo.currentIndexChanged.connect(self.on_device_selected)
 
-        self.refresh_devices_btn = QPushButton("⟳  Refresh")
-        self.refresh_devices_btn.clicked.connect(self.refresh_devices)
+        self.btn_refresh_dev = QPushButton()
+        self.btn_refresh_dev.clicked.connect(self.refresh_devices)
 
-        self.device_info_label = QLabel("Нет подключённых устройств")
-        self.device_info_label.setStyleSheet(f"color: {CLR_TEXT_DIM}; font-size: 12px;")
+        self.lang_combo = QComboBox()
+        self.lang_combo.addItems(["RU", "EN"])
+        self.lang_combo.currentIndexChanged.connect(self.change_language)
 
-        dev_row.addWidget(lbl_dev)
-        dev_row.addWidget(self.device_combo)
-        dev_row.addWidget(self.refresh_devices_btn)
-        dev_row.addSpacing(16)
-        dev_row.addWidget(self.device_info_label)
-        dev_row.addStretch()
-        self.main_layout.addLayout(dev_row)
+        self.theme_combo = QComboBox()
+        self.theme_combo.addItems(["Dark", "Light"])
+        self.theme_combo.currentIndexChanged.connect(self.change_theme)
 
-        # ── Строка поиска и фильтров ─────────────────────────────────────────
-        filter_row = QHBoxLayout()
+        self.device_info_label = QLabel()
+
+        top_bar.addWidget(self.lbl_dev)
+        top_bar.addWidget(self.device_combo)
+        top_bar.addWidget(self.btn_refresh_dev)
+        top_bar.addSpacing(15)
+        top_bar.addWidget(self.lang_combo)
+        top_bar.addWidget(self.theme_combo)
+        top_bar.addStretch()
+        top_bar.addWidget(self.device_info_label)
+
+        self.main_layout.addLayout(top_bar)
+
+        filters = QHBoxLayout()
 
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("🔍  Поиск по имени пакета…")
-        self.search_input.textChanged.connect(self._apply_filters)
-        self.search_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.search_input.textChanged.connect(
+            lambda: self.search_timer.start(250)
+        )
 
-        self.clear_search_btn = QPushButton("✕")
-        self.clear_search_btn.setFixedWidth(30)
-        self.clear_search_btn.setToolTip("Сбросить фильтры")
-        self.clear_search_btn.clicked.connect(self._clear_filters)
-
-        lbl_type = QLabel("Тип:")
-        lbl_type.setStyleSheet(f"color: {CLR_TEXT_DIM};")
         self.filter_type = QComboBox()
-        self.filter_type.setMinimumWidth(100)
-        self.filter_type.addItems(["Все", "User", "System"])
-        self.filter_type.currentIndexChanged.connect(self._apply_filters)
+        self.filter_type.currentIndexChanged.connect(self.apply_filters)
 
-        lbl_status = QLabel("Статус:")
-        lbl_status.setStyleSheet(f"color: {CLR_TEXT_DIM};")
         self.filter_status = QComboBox()
-        self.filter_status.setMinimumWidth(110)
-        self.filter_status.addItems(["Все", "Enabled", "Disabled"])
-        self.filter_status.currentIndexChanged.connect(self._apply_filters)
+        self.filter_status.currentIndexChanged.connect(self.apply_filters)
 
-        filter_row.addWidget(self.search_input)
-        filter_row.addWidget(self.clear_search_btn)
-        filter_row.addSpacing(8)
-        filter_row.addWidget(lbl_type)
-        filter_row.addWidget(self.filter_type)
-        filter_row.addSpacing(8)
-        filter_row.addWidget(lbl_status)
-        filter_row.addWidget(self.filter_status)
-        self.main_layout.addLayout(filter_row)
+        filters.addWidget(self.search_input)
+        filters.addWidget(self.filter_type)
+        filters.addWidget(self.filter_status)
 
-        # ── Прогресс-бар ─────────────────────────────────────────────────────
+        self.main_layout.addLayout(filters)
+
         self.progress_bar = QProgressBar()
-        self.progress_bar.setFixedHeight(4)
-        self.progress_bar.setRange(0, 0)
         self.progress_bar.setVisible(False)
+
         self.main_layout.addWidget(self.progress_bar)
 
-        # ── Таблица ───────────────────────────────────────────────────────────
         self.app_table = QTableWidget()
         self.app_table.setColumnCount(3)
-        self.app_table.setHorizontalHeaderLabels(["Package Name", "Статус", "Тип"])
-
-        hdr = self.app_table.horizontalHeader()
-        hdr.setSectionResizeMode(self.COL_PKG,    QHeaderView.Stretch)
-        hdr.setSectionResizeMode(self.COL_STATUS, QHeaderView.Fixed)
-        hdr.setSectionResizeMode(self.COL_TYPE,   QHeaderView.Fixed)
-        self.app_table.setColumnWidth(self.COL_STATUS, 90)
-        self.app_table.setColumnWidth(self.COL_TYPE,   80)
-
         self.app_table.setSelectionBehavior(QTableWidget.SelectRows)
-        self.app_table.setSelectionMode(QTableWidget.SingleSelection)
         self.app_table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.app_table.verticalHeader().setVisible(False)
-        self.app_table.setSortingEnabled(True)
-        self.app_table.horizontalHeader().setSortIndicatorShown(True)
-        self.app_table.sortByColumn(self.COL_PKG, Qt.AscendingOrder)
-        self.app_table.itemSelectionChanged.connect(self.update_app_desc)
+
+        self.app_table.horizontalHeader().setSectionResizeMode(
+            0,
+            QHeaderView.Stretch,
+        )
+
+        self.app_table.itemSelectionChanged.connect(
+            self.update_app_desc
+        )
+
+        self.app_table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.app_table.customContextMenuRequested.connect(
+            self.show_context_menu
+        )
+
         self.main_layout.addWidget(self.app_table)
 
-        # ── Описание ──────────────────────────────────────────────────────────
         self.app_desc_label = QLabel()
         self.app_desc_label.setWordWrap(True)
-        self.app_desc_label.setMinimumHeight(72)
-        self.app_desc_label.setMaximumHeight(100)
-        self.app_desc_label.setStyleSheet(f"""
-            background-color: {CLR_SURFACE};
-            color: {CLR_TEXT};
-            border: 1px solid {CLR_BORDER};
-            padding: 8px 10px;
-            border-radius: 5px;
-        """)
+        self.app_desc_label.setMinimumHeight(90)
+        self.app_desc_label.setObjectName("descArea")
+
         self.main_layout.addWidget(self.app_desc_label)
-        self.clear_app_desc()
 
-        # ── Кнопки действий ───────────────────────────────────────────────────
-        action_row = QHBoxLayout()
+        buttons = QHBoxLayout()
 
-        self.refresh_apps_btn = QPushButton("⟳  Обновить список")
-        self.install_apk_btn  = QPushButton("⬆  Установить APK")
-        self.enable_btn       = QPushButton("✓  Enable")
-        self.disable_btn      = QPushButton("⊘  Disable")
-        self.uninstall_btn    = QPushButton("🗑  Uninstall")
-        self.uninstall_btn.setObjectName("dangerBtn")
+        self.btn_refresh_apps = QPushButton()
+        self.btn_install_apk = QPushButton()
+        self.btn_batch = QPushButton()
+        self.btn_enable = QPushButton()
+        self.btn_disable = QPushButton()
+        self.btn_uninstall = QPushButton()
 
-        self.refresh_apps_btn.clicked.connect(self.refresh_apps)
-        self.install_apk_btn.clicked.connect(self.install_apk)
-        self.enable_btn.clicked.connect(lambda: self.change_app_state("enable"))
-        self.disable_btn.clicked.connect(lambda: self.change_app_state("disable"))
-        self.uninstall_btn.clicked.connect(self.uninstall_app)
+        self.btn_uninstall.setObjectName("dangerBtn")
 
-        self._action_buttons = [
-            self.refresh_apps_btn, self.install_apk_btn,
-            self.enable_btn, self.disable_btn, self.uninstall_btn,
+        self.btn_refresh_apps.clicked.connect(self.refresh_apps)
+        self.btn_install_apk.clicked.connect(self.install_apk)
+        self.btn_batch.clicked.connect(self.open_batch_dialog)
+
+        self.btn_enable.clicked.connect(
+            lambda: self.change_app_state("enable")
+        )
+
+        self.btn_disable.clicked.connect(
+            lambda: self.change_app_state("disable")
+        )
+
+        self.btn_uninstall.clicked.connect(self.uninstall_app)
+
+        self.action_buttons = [
+            self.btn_refresh_apps,
+            self.btn_install_apk,
+            self.btn_batch,
+            self.btn_enable,
+            self.btn_disable,
+            self.btn_uninstall,
         ]
-        for btn in self._action_buttons:
-            action_row.addWidget(btn)
 
-        self.main_layout.addLayout(action_row)
+        for button in self.action_buttons:
+            buttons.addWidget(button)
 
-        # ── Статусная строка ──────────────────────────────────────────────────
-        self.status_label = QLabel("Готово")
-        self.status_label.setStyleSheet(f"color: {CLR_TEXT_DIM}; font-size: 12px;")
+        self.main_layout.addLayout(buttons)
+
+        self.status_label = QLabel()
+
         self.main_layout.addWidget(self.status_label)
 
-    def set_status(self, text: str):
-        self.status_label.setText(text)
+    def apply_theme(self):
+        c = THEMES[self.theme_mode]
 
-    def set_loading(self, loading: bool):
-        self.progress_bar.setVisible(loading)
-        for btn in self._action_buttons:
-            btn.setEnabled(not loading)
+        self.setStyleSheet(
+            f"""
+            QWidget {{
+                background-color: {c['bg']};
+                color: {c['text']};
+            }}
 
-    # ── Device ────────────────────────────────────────────────────────────────
+            QTableWidget {{
+                background-color: {c['surface']};
+                border: 1px solid {c['border']};
+                gridline-color: {c['border']};
+            }}
 
-    def on_device_selected(self, index):
-        if index < 0:
-            return
-        self.clear_app_desc()
-        self.load_device_info()
-        self.load_all_apps()
+            QHeaderView::section {{
+                background-color: {c['surface2']};
+                border: none;
+                border-bottom: 1px solid {c['border']};
+                padding: 4px;
+                color: {c['accent']};
+                font-weight: bold;
+            }}
+
+            QPushButton {{
+                background-color: {c['surface2']};
+                border: 1px solid {c['border']};
+                border-radius: 4px;
+                padding: 6px;
+            }}
+
+            QPushButton:hover {{
+                border-color: {c['accent']};
+            }}
+
+            QPushButton#dangerBtn {{
+                color: {c['red']};
+                border-color: {c['red']};
+            }}
+
+            QLineEdit, QComboBox {{
+                background-color: {c['surface2']};
+                border: 1px solid {c['border']};
+                border-radius: 4px;
+                padding: 4px;
+            }}
+
+            QLabel#descArea {{
+                background-color: {c['surface']};
+                border: 1px solid {c['border']};
+                border-radius: 4px;
+                padding: 10px;
+            }}
+            """
+        )
+
+        self.apply_filters()
+
+    def retranslate_ui(self):
+        t = STRINGS[self.lang]
+
+        self.lbl_dev.setText(t["device_lbl"])
+        self.btn_refresh_dev.setText(t["refresh_dev"])
+
+        self.search_input.setPlaceholderText(t["search_ph"])
+
+        self.app_table.setHorizontalHeaderLabels(
+            ["Package", "Status", "Type"]
+        )
+
+        self.filter_type.clear()
+        self.filter_type.addItem(t["type_all"], "all")
+        self.filter_type.addItem(t["type_user"], "User")
+        self.filter_type.addItem(t["type_sys"], "System")
+
+        self.filter_status.clear()
+        self.filter_status.addItem(t["status_all"], "all")
+        self.filter_status.addItem(t["stat_en"], "Enabled")
+        self.filter_status.addItem(t["stat_dis"], "Disabled")
+
+        self.btn_refresh_apps.setText(t["btn_refresh_apps"])
+        self.btn_install_apk.setText(t["btn_install_apk"])
+        self.btn_batch.setText(t["btn_batch"])
+        self.btn_enable.setText(t["btn_enable"])
+        self.btn_disable.setText(t["btn_disable"])
+        self.btn_uninstall.setText(t["btn_uninstall"])
+
+        self.set_status(t["ready"])
+
+    def change_theme(self, index):
+        self.theme_mode = "dark" if index == 0 else "light"
+        self.apply_theme()
+
+    def change_language(self, index):
+        self.lang = "ru" if index == 0 else "en"
+        self.retranslate_ui()
+        self.apply_filters()
 
     def refresh_devices(self):
-        self.device_combo.blockSignals(True)
-        self.device_combo.clear()
-        self.device_combo.blockSignals(False)
-        self.run_adb_command("adb devices", self._handle_devices)
+        self.run_adb_command(
+            AdbClient.run("devices"),
+            self.handle_devices,
+        )
 
-    @pyqtSlot(str)
-    def _handle_devices(self, output):
+    def handle_devices(self, output):
         devices = []
+
         for line in output.splitlines()[1:]:
             parts = line.split()
+
             if len(parts) >= 2 and parts[1] == "device":
                 devices.append(parts[0])
 
@@ -382,319 +443,579 @@ class AndroidAppManager(QMainWindow):
         self.device_combo.blockSignals(False)
 
         if devices:
-            self.device_combo.setCurrentIndex(0)
             self.on_device_selected(0)
         else:
-            self.device_info_label.setText("Нет подключённых устройств")
+            self.device_info_label.setText(
+                STRINGS[self.lang]["no_devices"]
+            )
+
+    def on_device_selected(self, index):
+        if index < 0:
+            return
+
+        if not self.device_combo.currentText():
+            return
+
+        self.load_device_info()
+        self.load_all_apps()
 
     def load_device_info(self):
         device = self.device_combo.currentText()
-        if device:
-            self.run_adb_command(
-                f"adb -s {device} shell getprop",
-                self._handle_device_info
-            )
 
-    @pyqtSlot(str)
-    def _handle_device_info(self, output):
-        info = {}
-        for line in output.splitlines():
-            if "]:" in line:
-                key, _, value = line.partition("]:")
-                info[key.strip("[] ")] = value.strip("[] ")
-        model   = info.get("ro.product.model", "Unknown")
-        version = info.get("ro.build.version.release", "Unknown")
-        sdk     = info.get("ro.build.version.sdk", "Unknown")
-        self.device_info_label.setText(
-            f"{model}  |  Android {version}  |  API {sdk}"
+        self.run_adb_command(
+            AdbClient.run(
+                "-s",
+                device,
+                "shell",
+                "getprop",
+            ),
+            self.handle_device_info,
         )
 
-    # ── Загрузка приложений ───────────────────────────────────────────────────
+    def handle_device_info(self, output):
+        props = {}
 
-    def refresh_apps(self):
-        if not self.device_combo.currentText():
-            QMessageBox.warning(self, "Ошибка", "Не выбрано устройство")
-            return
-        self.load_all_apps()
+        for line in output.splitlines():
+            if "]: [" not in line:
+                continue
+
+            try:
+                key, value = line.split("]: [", 1)
+
+                key = key[1:]
+                value = value[:-1]
+
+                props[key] = value
+
+            except Exception:
+                continue
+
+        model = props.get("ro.product.model", "Unknown")
+        brand = props.get("ro.product.brand", "").capitalize()
+        version = props.get("ro.build.version.release", "?")
+
+        text = f"{brand} {model} | Android {version}".strip()
+
+        self.device_info_label.setText(text)
 
     def load_all_apps(self):
         device = self.device_combo.currentText()
+
         if not device:
             return
-        self._packages_buf = {}
-        self.all_apps      = []
-        self.app_table.setRowCount(0)
+
         self.set_loading(True)
-        self.set_status("Загружаю список пакетов…")
 
         self.run_adb_command(
-            f"adb -s {device} shell pm list packages -f {PM_USER}",
-            self._handle_installed_packages
+            AdbClient.run(
+                "-s",
+                device,
+                "shell",
+                "pm",
+                "list",
+                "packages",
+                "-f",
+                PM_USER,
+                PM_USER_ID,
+            ),
+            self.handle_packages,
         )
 
-    @pyqtSlot(str)
-    def _handle_installed_packages(self, output):
-        if output.startswith("ERROR") or "SecurityException" in output:
-            self.set_status(f"Ошибка: {output[:150]}")
-            self.set_loading(False)
-            return
+    def handle_packages(self, output):
+        self.packages_buffer.clear()
 
         for line in output.splitlines():
-            line = line.strip()
             if not line.startswith("package:"):
                 continue
-            body = line[len("package:"):]
-            if "=" not in body:
-                continue
-            path, pkg = body.rsplit("=", 1)
-            pkg  = pkg.strip()
-            path = path.strip()
-            if pkg:
-                self._packages_buf[pkg] = {
-                    "path":   path,
+
+            try:
+                path, package = line[8:].rsplit("=", 1)
+
+                self.packages_buffer[package.strip()] = {
+                    "path": path,
                     "status": "Enabled",
                 }
 
-        device = self.device_combo.currentText()
-        if not device:
-            self.set_loading(False)
-            return
+            except Exception:
+                continue
 
         self.run_adb_command(
-            f"adb -s {device} shell pm list packages -d {PM_USER}",
-            self._handle_disabled_packages
+            AdbClient.run(
+                "-s",
+                self.device_combo.currentText(),
+                "shell",
+                "pm",
+                "list",
+                "packages",
+                "-d",
+                PM_USER,
+                PM_USER_ID,
+            ),
+            self.handle_disabled_packages,
         )
 
-    @pyqtSlot(str)
-    def _handle_disabled_packages(self, output):
-        if not (output.startswith("ERROR") or "SecurityException" in output):
-            for line in output.splitlines():
-                line = line.strip()
-                if not line.startswith("package:"):
-                    continue
-                pkg = line[len("package:"):].strip()
-                if pkg in self._packages_buf:
-                    self._packages_buf[pkg]["status"] = "Disabled"
+    def handle_disabled_packages(self, output):
+        for line in output.splitlines():
+            package = line.replace("package:", "").strip()
+
+            if package in self.packages_buffer:
+                self.packages_buffer[package]["status"] = "Disabled"
+
+        self.all_apps.clear()
 
         system_paths = (
-            "/system/", "/product/", "/vendor/",
-            "/system_ext/", "/oem/", "/my_preload/",
-            "/apex/", "/my_bigball/",
+            "/system/",
+            "/vendor/",
+            "/product/",
+            "/apex/",
         )
-        self.all_apps = []
-        for pkg, info in self._packages_buf.items():
-            is_system = any(p in info["path"] for p in system_paths)
-            self.all_apps.append((
-                pkg,
-                info["status"],
-                "System" if is_system else "User",
-            ))
 
-        self.all_apps.sort(key=lambda x: x[self.COL_PKG])
-        self.display_apps(self.all_apps)
+        for package, info in self.packages_buffer.items():
+            app_type = (
+                "System"
+                if any(p in info["path"] for p in system_paths)
+                else "User"
+            )
+
+            self.all_apps.append(
+                AppInfo(
+                    package=package,
+                    status=info["status"],
+                    app_type=app_type,
+                    path=info["path"],
+                )
+            )
+
+        self.all_apps.sort(key=lambda x: x.package)
+
+        self.apply_filters()
+
         self.set_loading(False)
-        self.set_status(f"Загружено: {len(self.all_apps)} приложений")
-        self._packages_buf.clear()
 
-    # ── Отображение ───────────────────────────────────────────────────────────
+        self.set_status(
+            STRINGS[self.lang]["loaded_count"].format(
+                len(self.all_apps)
+            )
+        )
 
-    def display_apps(self, apps: list):
-        self.app_table.setSortingEnabled(False)
+    def apply_filters(self):
+        query = self.search_input.text().lower()
+
+        type_filter = self.filter_type.currentData()
+        status_filter = self.filter_status.currentData()
+
+        colors = THEMES[self.theme_mode]
+        t = STRINGS[self.lang]
+
+        filtered = []
+
+        for app in self.all_apps:
+            if query and query not in app.package.lower():
+                continue
+
+            if type_filter != "all" and app.app_type != type_filter:
+                continue
+
+            if status_filter != "all" and app.status != status_filter:
+                continue
+
+            filtered.append(app)
+
         self.app_table.setRowCount(0)
 
-        for pkg, status, app_type in apps:
+        for app in filtered:
             row = self.app_table.rowCount()
             self.app_table.insertRow(row)
 
-            item_pkg    = QTableWidgetItem(pkg)
-            item_status = QTableWidgetItem(status)
-            item_type   = QTableWidgetItem(app_type)
+            status_text = (
+                t["stat_en"]
+                if app.status == "Enabled"
+                else t["stat_dis"]
+            )
 
-            item_status.setTextAlignment(Qt.AlignCenter)
-            item_type.setTextAlignment(Qt.AlignCenter)
+            type_text = (
+                t["type_sys"]
+                if app.app_type == "System"
+                else t["type_user"]
+            )
 
-            row_color = QColor(CLR_ROW_DISABLED if status == "Disabled" else CLR_ROW_ENABLED)
-            for item in (item_pkg, item_status, item_type):
+            items = [
+                QTableWidgetItem(app.package),
+                QTableWidgetItem(status_text),
+                QTableWidgetItem(type_text),
+            ]
+
+            row_color = QColor(
+                colors["row_disabled"]
+                if app.status == "Disabled"
+                else colors["row_enabled"]
+            )
+
+            for item in items:
                 item.setBackground(row_color)
 
-            item_status.setForeground(
-                QColor(CLR_RED if status == "Disabled" else CLR_GREEN)
+            items[1].setForeground(
+                QColor(
+                    colors["green"]
+                    if app.status == "Enabled"
+                    else colors["red"]
+                )
             )
-            item_type.setForeground(
-                QColor(CLR_TEXT_DIM if app_type == "System" else CLR_TEXT)
-            )
 
-            self.app_table.setItem(row, self.COL_PKG,    item_pkg)
-            self.app_table.setItem(row, self.COL_STATUS, item_status)
-            self.app_table.setItem(row, self.COL_TYPE,   item_type)
-
-        self.app_table.setSortingEnabled(True)
-
-    # ── Фильтры ───────────────────────────────────────────────────────────────
-
-    def _apply_filters(self):
-        query      = self.search_input.text().lower().strip()
-        type_flt   = self.filter_type.currentText()
-        status_flt = self.filter_status.currentText()
-
-        filtered = [
-            (pkg, status, app_type)
-            for pkg, status, app_type in self.all_apps
-            if (not query or query in pkg.lower())
-            and (type_flt   == "Все" or app_type == type_flt)
-            and (status_flt == "Все" or status   == status_flt)
-        ]
-
-        self.display_apps(filtered)
-        total = len(self.all_apps)
-        count = len(filtered)
-        suffix = f"  (показано {count} из {total})" if count != total else f"  ({total})"
-        self.set_status(f"Приложений{suffix}")
-
-    def _clear_filters(self):
-        self.search_input.clear()
-        self.filter_type.setCurrentIndex(0)
-        self.filter_status.setCurrentIndex(0)
-
-    # ── Описание ──────────────────────────────────────────────────────────────
-
-    def clear_app_desc(self):
-        self.app_desc_label.setText(
-            f"<span style='color:{CLR_TEXT_DIM}'>"
-            f"Выберите приложение для просмотра информации.</span>"
-        )
+            for col, item in enumerate(items):
+                self.app_table.setItem(row, col, item)
 
     def update_app_desc(self):
         row = self.app_table.currentRow()
+
         if row == -1:
-            self.clear_app_desc()
             return
 
-        pkg    = self.app_table.item(row, self.COL_PKG).text()
-        status = self.app_table.item(row, self.COL_STATUS).text()
-        info   = self.uad_info.get(pkg)
+        package = self.app_table.item(row, 0).text()
 
-        status_color = CLR_RED if status == "Disabled" else CLR_GREEN
-        status_str   = f"<span style='color:{status_color}'>{status}</span>"
+        app = next(
+            (a for a in self.all_apps if a.package == package),
+            None,
+        )
 
-        if not info:
-            self.app_desc_label.setText(
-                f"<b>{pkg}</b>  ·  {status_str}<br>"
-                f"<span style='color:{CLR_TEXT_DIM}'>Нет информации в uad_lists.json</span>"
+        if not app:
+            return
+
+        info = self.uad_info.get(package)
+
+        colors = THEMES[self.theme_mode]
+        t = STRINGS[self.lang]
+
+        status_text = (
+            t["stat_en"]
+            if app.status == "Enabled"
+            else t["stat_dis"]
+        )
+
+        status_color = (
+            colors["green"]
+            if app.status == "Enabled"
+            else colors["red"]
+        )
+
+        text = (
+            f"<b>{package}</b> | "
+            f"<span style='color:{status_color}'>{status_text}</span><br>"
+        )
+
+        if info:
+            text += (
+                f"<p><b>List:</b> {info.get('list', '?')} | "
+                f"<b>Removal:</b> {info.get('removal', '?')}</p>"
             )
-            return
 
-        app_type = info.get("list", "Unknown")
-        desc     = info.get("description", "Нет описания.")
-        removal  = info.get("removal", "Recommended")
-
-        removal_colors = {
-            "Recommended": CLR_GREEN,
-            "Advanced":    CLR_YELLOW,
-            "Expert":      CLR_RED,
-        }
-        rc = removal_colors.get(removal, CLR_TEXT)
-        self.app_desc_label.setText(
-            f"<b>{pkg}</b>  ·  {status_str}  ·  "
-            f"List: {app_type}  ·  "
-            f"Removal: <span style='color:{rc}'>{removal}</span><br>"
-            f"<span style='color:{CLR_TEXT_DIM}'>{desc}</span>"
-        )
-
-    # ── Действия ──────────────────────────────────────────────────────────────
-
-    def install_apk(self):
-        device = self.device_combo.currentText()
-        if not device:
-            QMessageBox.warning(self, "Ошибка", "Не выбрано устройство")
-            return
-        filepath, _ = QFileDialog.getOpenFileName(
-            self, "Выберите APK", "", "APK Files (*.apk)"
-        )
-        if not filepath:
-            return
-        self.set_loading(True)
-        self.set_status(f"Устанавливаю {Path(filepath).name}…")
-        self.run_adb_command(
-            f'adb -s {device} install -r "{filepath}"',
-            self._handle_install_result
-        )
-
-    @pyqtSlot(str)
-    def _handle_install_result(self, output):
-        self.set_loading(False)
-        if "Success" in output:
-            QMessageBox.information(self, "Установка", "Приложение успешно установлено")
-            QTimer.singleShot(300, self.load_all_apps)
+            text += (
+                f"<p style='color:{colors['text_dim']}'>"
+                f"{info.get('description', '')}</p>"
+            )
         else:
-            QMessageBox.warning(self, "Ошибка установки", f"Не удалось установить:\n{output}")
+            text += (
+                f"<p style='color:{colors['text_dim']}'>"
+                f"{t['no_info']}</p>"
+            )
 
-    def change_app_state(self, action: str):
+        self.app_desc_label.setText(text)
+
+    def change_app_state(self, action):
         device = self.device_combo.currentText()
-        row    = self.app_table.currentRow()
-        if not device:
-            QMessageBox.warning(self, "Ошибка", "Не выбрано устройство")
-            return
-        if row == -1:
-            QMessageBox.warning(self, "Ошибка", "Не выбрано приложение")
+        row = self.app_table.currentRow()
+
+        if not device or row == -1:
             return
 
-        pkg = self.app_table.item(row, self.COL_PKG).text()
-        cmd = "disable-user" if action == "disable" else "enable"
-        self.run_adb_command(
-            f"adb -s {device} shell pm {cmd} {PM_USER} {pkg}",
-            lambda _: QTimer.singleShot(300, self.load_all_apps)
+        package = self.app_table.item(row, 0).text()
+
+        pm_action = (
+            "disable-user"
+            if action == "disable"
+            else "enable"
         )
+
+        self.run_adb_command(
+            AdbClient.run(
+                "-s",
+                device,
+                "shell",
+                "pm",
+                pm_action,
+                PM_USER,
+                PM_USER_ID,
+                package,
+            ),
+            lambda output: self.handle_state_result(output, package),
+        )
+
+    def handle_state_result(self, output, package):
+        if any(
+            x in output
+            for x in [
+                "Security exception",
+                "Permission denied",
+                "not allowed",
+            ]
+        ):
+            QMessageBox.critical(
+                self,
+                "Error",
+                STRINGS[self.lang]["err_protected"].format(
+                    package
+                ),
+            )
+
+        elif "Error" in output or "Failure" in output:
+            QMessageBox.warning(
+                self,
+                "Error",
+                STRINGS[self.lang]["err_cmd"].format(output),
+            )
+
+        QTimer.singleShot(400, self.load_all_apps)
 
     def uninstall_app(self):
         device = self.device_combo.currentText()
-        row    = self.app_table.currentRow()
+        row = self.app_table.currentRow()
+
         if not device or row == -1:
-            QMessageBox.warning(self, "Ошибка", "Выберите устройство и приложение")
             return
 
-        pkg      = self.app_table.item(row, self.COL_PKG).text()
-        app_type = self.app_table.item(row, self.COL_TYPE).text()
+        package = self.app_table.item(row, 0).text()
+        app_type = self.app_table.item(row, 2).text()
 
-        if app_type == "System":
-            reply = QMessageBox.warning(
-                self, "Внимание",
-                f"Удаление системного приложения может нарушить работу устройства.\n\n"
-                f"Пакет: {pkg}\n\nПродолжить?",
-                QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
+        if app_type == STRINGS[self.lang]["type_sys"]:
+            result = QMessageBox.warning(
+                self,
+                "Warning",
+                STRINGS[self.lang]["confirm_sys"],
+                QMessageBox.Yes | QMessageBox.No,
             )
-            if reply == QMessageBox.No:
+
+            if result == QMessageBox.No:
                 return
 
         self.run_adb_command(
-            f"adb -s {device} shell pm uninstall --user 0 {pkg}",
-            lambda _: QTimer.singleShot(300, self.load_all_apps)
+            AdbClient.run(
+                "-s",
+                device,
+                "shell",
+                "pm",
+                "uninstall",
+                PM_USER,
+                PM_USER_ID,
+                package,
+            ),
+            lambda output: self.handle_state_result(
+                output,
+                package,
+            ),
         )
 
-    # ── ADB worker ────────────────────────────────────────────────────────────
+    def install_apk(self):
+        device = self.device_combo.currentText()
 
-    def run_adb_command(self, command: str, callback):
+        if not device:
+            return
+
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "APK",
+            "",
+            "*.apk",
+        )
+
+        if not path:
+            return
+
+        self.set_loading(True)
+
+        self.run_adb_command(
+            AdbClient.run(
+                "-s",
+                device,
+                "install",
+                "-r",
+                path,
+            ),
+            self.finish_install,
+        )
+
+    def finish_install(self, output):
+        self.set_loading(False)
+
+        if "Success" in output:
+            QMessageBox.information(
+                self,
+                "OK",
+                STRINGS[self.lang]["install_ok"],
+            )
+
+        self.load_all_apps()
+
+    def open_batch_dialog(self):
+        device = self.device_combo.currentText()
+
+        if not device:
+            return
+
+        t = STRINGS[self.lang]
+        c = THEMES[self.theme_mode]
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle(t["btn_batch"])
+        dialog.resize(500, 450)
+
+        dialog.setStyleSheet(
+            f"""
+            background-color: {c['bg']};
+            color: {c['text']};
+            """
+        )
+
+        layout = QVBoxLayout(dialog)
+
+        editor = QTextEdit()
+
+        layout.addWidget(editor)
+
+        run_button = QPushButton(t["btn_disable"])
+
+        layout.addWidget(run_button)
+
+        def run_batch():
+            packages = [
+                line.strip()
+                for line in editor.toPlainText().splitlines()
+                if line.strip()
+            ]
+
+            if not packages:
+                return
+
+            self.set_loading(True)
+
+            for package in packages:
+                try:
+                    subprocess.run(
+                        AdbClient.run(
+                            "-s",
+                            device,
+                            "shell",
+                            "pm",
+                            "disable-user",
+                            PM_USER,
+                            PM_USER_ID,
+                            package,
+                        ),
+                        capture_output=True,
+                        text=True,
+                        timeout=20,
+                    )
+
+                except Exception as e:
+                    print(e)
+
+            dialog.accept()
+
+            QTimer.singleShot(500, self.load_all_apps)
+
+        run_button.clicked.connect(run_batch)
+
+        dialog.exec_()
+
+    def show_context_menu(self, pos):
+        item = self.app_table.itemAt(pos)
+
+        if not item:
+            return
+
+        menu = QMenu()
+
+        copy_action = menu.addAction(
+            STRINGS[self.lang]["copy_pkg"]
+        )
+
+        action = menu.exec_(
+            self.app_table.viewport().mapToGlobal(pos)
+        )
+
+        if action == copy_action:
+            package = self.app_table.item(
+                item.row(),
+                0,
+            ).text()
+
+            QApplication.clipboard().setText(package)
+
+    def load_uad_lists(self):
+        path = Path("uad_lists.json")
+
+        if not path.exists():
+            return
+
+        try:
+            with open(path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            for entry in data:
+                package = entry.get("id")
+
+                if package:
+                    self.uad_info[package] = entry
+
+        except Exception as e:
+            print(f"uad_lists.json error: {e}")
+
+    def set_status(self, text):
+        self.status_label.setText(text)
+
+    def set_loading(self, loading):
+        self.progress_bar.setVisible(loading)
+
+        self.progress_bar.setRange(
+            0,
+            0 if loading else 1,
+        )
+
+        for button in self.action_buttons:
+            button.setEnabled(not loading)
+
+    def refresh_apps(self):
+        self.load_all_apps()
+
+    def run_adb_command(self, command, callback):
         worker = AdbWorker(command)
-        worker.output.connect(callback)
-        worker.finished.connect(
-            lambda w=worker: self.workers.remove(w) if w in self.workers else None
-        )
-        self.workers.append(worker)
-        worker.start()
 
-    # ── Cleanup ───────────────────────────────────────────────────────────────
+        worker.finished_output.connect(callback)
+
+        worker.finished.connect(
+            lambda: self.workers.remove(worker)
+            if worker in self.workers
+            else None
+        )
+
+        self.workers.append(worker)
+
+        worker.start()
 
     def closeEvent(self, event):
         for worker in self.workers:
             if worker.isRunning():
                 worker.quit()
                 worker.wait()
+
         super().closeEvent(event)
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
     app.setStyle("Fusion")
+
     window = AndroidAppManager()
     window.show()
+
     sys.exit(app.exec_())
