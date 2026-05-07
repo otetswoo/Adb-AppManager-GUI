@@ -28,7 +28,7 @@ cd android-app-manager
 pip install -r requirements.txt
 python src/android_manager/main.py
 ```
-![Preview](preview.png)
+![Preview](preview_v2.png)
 
 Android App Manager is a Python-based GUI application that allows users to manage their Android applications via ADB (Android Debug Bridge). It provides functionality to list, search , disable, enable and uninstall applications.
 
