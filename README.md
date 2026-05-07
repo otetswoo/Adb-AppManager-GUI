@@ -3,6 +3,7 @@
 GUI приложение для управления Android-приложениями через ADB.
 
 🇬🇧 Forked from [mehran-mousavi/Adb-AppManager-GUI](https://github.com/mehran-mousavi/Adb-AppManager-GUI)
+
 🇷🇺 Форк проекта [mehran-mousavi/Adb-AppManager-GUI](https://github.com/mehran-mousavi/Adb-AppManager-GUI)
 
 ## Возможности
