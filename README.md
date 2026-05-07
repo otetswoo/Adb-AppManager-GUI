@@ -23,7 +23,7 @@ GUI приложение для управления Android-приложени�
 
 ### Из исходников
 ```bash
-git clone https://github.com/yourusername/android-app-manager.git
+git clone https://github.com/otetswoo/Adb-AppManager-GUI
 cd android-app-manager
 pip install -r requirements.txt
 python src/android_manager/main.py
