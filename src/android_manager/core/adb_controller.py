@@ -146,6 +146,42 @@ class AdbController:
             worker.error.connect(error_callback)
         self._start_worker(worker)
     
+    def export_apk(self, device: str, package: str, output_path: str,
+                  callback=None, error_callback=None) -> None:
+        """Export APK file from device to local storage"""
+        if not self.validate_package_name(package):
+            if error_callback:
+                error_callback(f"Invalid package name: {package}")
+            return
+        
+        # First get the package path
+        worker = AdbWorker(self.get_adb_command(
+            "-s", device, "shell", "pm", "path", package
+        ))
+        
+        def handle_path_output(output: str):
+            if "package:" not in output:
+                if error_callback:
+                    error_callback(f"Package not found: {package}")
+                return
+            
+            # Extract APK path from output (e.g., "package:/data/app/...")
+            apk_path = output.replace("package:", "").strip()
+            
+            # Pull the APK file
+            pull_worker = AdbWorker(self.get_adb_command(
+                "-s", device, "pull", apk_path, output_path
+            ), timeout=120)
+            pull_worker.finished.connect(callback if callback else lambda x: None)
+            if error_callback:
+                pull_worker.error.connect(error_callback)
+            self._start_worker(pull_worker)
+        
+        worker.finished.connect(handle_path_output)
+        if error_callback:
+            worker.error.connect(error_callback)
+        self._start_worker(worker)
+    
     def get_device_properties(self, device: str, callback=None,
                             error_callback=None) -> None:
         """Get device properties"""
