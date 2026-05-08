@@ -121,6 +121,10 @@ class MainWindow(QMainWindow):
         self.install_btn.clicked.connect(self._install_apk)
         button_layout.addWidget(self.install_btn)
         
+        self.export_btn = QPushButton()
+        self.export_btn.clicked.connect(self._export_apk)
+        button_layout.addWidget(self.export_btn)
+        
         self.batch_btn = QPushButton()
         self.batch_btn.clicked.connect(self._batch_disable)
         button_layout.addWidget(self.batch_btn)
@@ -139,7 +143,7 @@ class MainWindow(QMainWindow):
         button_layout.addWidget(self.uninstall_btn)
         
         self.action_buttons = [
-            self.refresh_btn, self.install_btn, self.batch_btn,
+            self.refresh_btn, self.install_btn, self.export_btn, self.batch_btn,
             self.enable_btn, self.disable_btn, self.uninstall_btn
         ]
         
@@ -223,6 +227,7 @@ class MainWindow(QMainWindow):
         # Update buttons
         self.refresh_btn.setText(strings["btn_refresh_apps"])
         self.install_btn.setText(strings["btn_install_apk"])
+        self.export_btn.setText(strings["btn_export_apk"])
         self.batch_btn.setText(strings["btn_batch"])
         self.enable_btn.setText(strings["btn_enable"])
         self.disable_btn.setText(strings["btn_disable"])
@@ -499,6 +504,55 @@ class MainWindow(QMainWindow):
             self.load_packages()
         
         self.adb.install_apk(device, file_path, callback=on_finish)
+    
+    def _export_apk(self):
+        """Export APK file from device"""
+        device = self.device_selector.get_selected_device()
+        package = self.package_table.get_selected_package()
+        
+        if not device or not package:
+            strings = STRINGS[self.current_lang]
+            QMessageBox.warning(
+                self, "Warning",
+                strings["err_no_dev"] if not device else "Select a package to export"
+            )
+            return
+        
+        # Get default filename from package name
+        default_filename = f"{package}.apk"
+        
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, "Save APK", default_filename, "APK files (*.apk)"
+        )
+        if not file_path:
+            return
+        
+        self._set_loading(True)
+        
+        def on_finish(output):
+            self._set_loading(False)
+            strings = STRINGS[self.current_lang]
+            if "Success" in output or "pull" in output.lower() or os.path.exists(file_path):
+                QMessageBox.information(
+                    self, "Success",
+                    strings["export_ok"].format(file_path)
+                )
+                self.load_packages()
+            else:
+                QMessageBox.critical(
+                    self, "Error",
+                    strings["export_err"].format(output)
+                )
+        
+        def on_error(error_msg):
+            self._set_loading(False)
+            strings = STRINGS[self.current_lang]
+            QMessageBox.critical(
+                self, "Error",
+                strings["export_err"].format(error_msg)
+            )
+        
+        self.adb.export_apk(device, package, file_path, callback=on_finish, error_callback=on_error)
     
     def _batch_disable(self):
         """Open batch disable dialog"""
