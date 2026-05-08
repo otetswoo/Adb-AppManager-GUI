@@ -33,17 +33,11 @@ if [ -f "data/uad_lists.json" ]; then
     cp data/uad_lists.json "${INSTALL_DIR}/android_manager/data/"
 fi
 
-# Copy icon file (prefer PNG from icons directory, fallback to other locations)
+# Copy icon file from icons directory
 if [ -f "src/android_manager/ui/icons/icon-256.png" ]; then
     cp src/android_manager/ui/icons/icon-256.png "${INSTALL_DIR}/"
     # Also install to system icon directory for desktop integration
     cp src/android_manager/ui/icons/icon-256.png "${DEB_DIR}/usr/share/icons/hicolor/256x256/apps/adb-appmanager.png"
-elif [ -f "src/android_manager/ui/Adb-appmanager-icon.png" ]; then
-    cp src/android_manager/ui/Adb-appmanager-icon.png "${INSTALL_DIR}/"
-    cp src/android_manager/ui/Adb-appmanager-icon.png "${DEB_DIR}/usr/share/icons/hicolor/256x256/apps/adb-appmanager.png"
-elif [ -f "src/android_manager/ui/Adb-appmanager-icon.jpg" ]; then
-    cp src/android_manager/ui/Adb-appmanager-icon.jpg "${INSTALL_DIR}/"
-    cp src/android_manager/ui/Adb-appmanager-icon.jpg "${DEB_DIR}/usr/share/icons/hicolor/256x256/apps/adb-appmanager.jpg"
 fi
 
 # Create launcher
