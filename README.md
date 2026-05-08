@@ -4,29 +4,67 @@ GUI приложение для управления Android приложени�
 
 ## Запуск приложения
 
-### Способ 1: Через main.py в корне проекта
+🇷🇺 Форк проекта [mehran-mousavi/Adb-AppManager-GUI](https://github.com/mehran-mousavi/Adb-AppManager-GUI)
+
+## Возможности
+
+- 📱 Просмотр всех установленных приложений
+- 🔍 Поиск и фильтрация приложений
+- ⚡ Включение/отключение приложений
+- 🗑️ Удаление приложений (включая системные)
+- 📦 Установка APK-файлов
+- 📦 Экспорт APK-файлов с подключенного устройства
+- 📋 Пакетное отключение приложений
+- 🌓 Тёмная/светлая тема
+- 🌍 Поддержка русского и английского языков
+- 📊 Интеграция с Universal Android Debloater списками
+
+## Установка
+
+### Зависимости
+- Python 3.8+
+- ADB (Android Debug Bridge)
+- PyQt5
+
+### Из исходников
 ```bash
 python main.py
 ```
+![Preview](preview_v2.png)
+
+Android App Manager is a Python-based GUI application that allows users to manage their Android applications via ADB (Android Debug Bridge).
+
+## Features
+
+- 📱 View all installed apps
+- 🔍 Search and filter apps
+- ⚡ Enable/disable apps
+- 🗑️ Remove apps (including system apps)
+- 📦 Install APK files
+- 📦 Export APK files from a connected device
+- 📋 Batch disable apps
+- 🌓 Dark/light theme
+- 🌍 Support for Russian and English
+- 📊 Integration with Universal Android Debloater lists
 
 ### Способ 2: Через скрипт run.sh
 ```bash
 ./run.sh
 ```
 
-### Способ 3: Как Python модуль
-```bash
-cd src
-python -m android_manager.main
-```
+## Requirements
+
+- Python 3.8+
+- ADB (Android Debug Bridge)
+- PyQt5
+
+## Usage
 
 ## Установка зависимостей
 
-```bash
-pip install -r requirements.txt
-```
+The application will start and display a GUI to manage your Android applications.
 
-## Структура проекта
+## Note
 
 - `src/android_manager/` - основной код приложения (модульная версия)
   - `main.py` - точка входа
