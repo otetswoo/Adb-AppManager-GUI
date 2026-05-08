@@ -2,7 +2,7 @@
 Name=Android App Manager
 Comment=Manage Android applications via ADB
 Exec=adb-appmanager
-Icon=adb-appmanager
+Icon=adb-appmanager.png
 Terminal=false
 Type=Application
 Categories=System;Qt;

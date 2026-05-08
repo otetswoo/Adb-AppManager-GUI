@@ -33,10 +33,13 @@ if [ -f "data/uad_lists.json" ]; then
     cp data/uad_lists.json "${INSTALL_DIR}/android_manager/data/"
 fi
 
-# Copy icon file
-if [ -f "src/android_manager/ui/Adb-appmanager-icon.jpg" ]; then
-    cp src/android_manager/ui/Adb-appmanager-icon.jpg "${INSTALL_DIR}/"
+# Copy icon file (prefer PNG, fallback to JPG)
+if [ -f "src/android_manager/ui/Adb-appmanager-icon.png" ]; then
+    cp src/android_manager/ui/Adb-appmanager-icon.png "${INSTALL_DIR}/"
     # Also install to system icon directory for desktop integration
+    cp src/android_manager/ui/Adb-appmanager-icon.png "${BUILDROOT}/usr/share/icons/hicolor/256x256/apps/adb-appmanager.png"
+elif [ -f "src/android_manager/ui/Adb-appmanager-icon.jpg" ]; then
+    cp src/android_manager/ui/Adb-appmanager-icon.jpg "${INSTALL_DIR}/"
     cp src/android_manager/ui/Adb-appmanager-icon.jpg "${BUILDROOT}/usr/share/icons/hicolor/256x256/apps/adb-appmanager.jpg"
 fi
 
