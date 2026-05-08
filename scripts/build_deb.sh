@@ -36,6 +36,8 @@ fi
 # Copy icon file
 if [ -f "src/android_manager/ui/Adb-appmanager-icon.jpg" ]; then
     cp src/android_manager/ui/Adb-appmanager-icon.jpg "${INSTALL_DIR}/"
+    # Also install to system icon directory for desktop integration
+    cp src/android_manager/ui/Adb-appmanager-icon.jpg "${DEB_DIR}/usr/share/icons/hicolor/256x256/apps/adb-appmanager.jpg"
 fi
 
 # Create launcher
