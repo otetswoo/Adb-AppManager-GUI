@@ -1,42 +1,38 @@
 ```
-# Build artifacts
-dist/
-build/
-*.deb
-*.rpm
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Environment files
+# Dependencies
+.venv/
+venv/
+env/
 .env
 .env.local
 *.env.*
 
-# Logs and temp files
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Logs
 *.log
-*.tmp
 
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
 ```
