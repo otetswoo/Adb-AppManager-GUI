@@ -2,8 +2,6 @@
 
 GUI приложение для управления Android приложениями через ADB.
 
-## Запуск приложения
-
 🇷🇺 Форк проекта [mehran-mousavi/Adb-AppManager-GUI](https://github.com/mehran-mousavi/Adb-AppManager-GUI)
 
 ## Возможности
@@ -19,17 +17,20 @@ GUI приложение для управления Android приложени�
 - 🌍 Поддержка русского и английского языков
 - 📊 Интеграция с Universal Android Debloater списками
 
-## Установка
-
 ### Зависимости
 - Python 3.8+
 - ADB (Android Debug Bridge)
 - PyQt5
 
-### Из исходников
+### Запуск
+
+```bash
+git clone https://github.com/otetswoo/Adb-AppManager-GUI.git && cd Adb-AppManager-GUI && pip install -r requirements.txt
+```
 ```bash
 python main.py
 ```
+
 ![Preview](preview_v2.png)
 
 Android App Manager is a Python-based GUI application that allows users to manage their Android applications via ADB (Android Debug Bridge).
@@ -47,10 +48,6 @@ Android App Manager is a Python-based GUI application that allows users to manag
 - 🌍 Support for Russian and English
 - 📊 Integration with Universal Android Debloater lists
 
-### Способ 2: Через скрипт run.sh
-```bash
-./run.sh
-```
 
 ## Requirements
 
@@ -58,45 +55,8 @@ Android App Manager is a Python-based GUI application that allows users to manag
 - ADB (Android Debug Bridge)
 - PyQt5
 
-## Usage
-
 ## Установка зависимостей
 
 The application will start and display a GUI to manage your Android applications.
 
-## Note
 
-- `src/android_manager/` - основной код приложения (модульная версия)
-  - `main.py` - точка входа
-  - `ui/` - интерфейс пользователя
-  - `core/` - ядро (ADB контроллер)
-  - `utils/` - утилиты, константы, локализация
-  - `data/` - загрузчики данных
-- `scripts/` - скрипты сборки (DEB, RPM)
-- `tests/` - тесты
-
-## Возможности
-
-- Просмотр списка установленных приложений
-- Включение/отключение приложений
-- Удаление приложений
-- Экспорт APK файлов с устройства
-- Установка APK файлов
-- Пакетное отключение приложений
-- Фильтрация по типу и статусу
-- Поиск по имени пакета
-- Поддержка русского и английского языков
-- Тёмная и светлая темы
-
-## Сборка пакетов
-
-```bash
-# Сборка DEB
-./scripts/build_deb.sh
-
-# Сборка RPM
-./scripts/build_rpm.sh
-
-# Сборка всех пакетов
-./scripts/build_all.sh
-```
