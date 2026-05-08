@@ -62,6 +62,7 @@ class DeviceSelector(QWidget):
         # Update info label
         if not devices:
             self.info_label.setText("No devices connected")
+            self.device_changed.emit("")  # Emit empty string when no devices
         elif len(devices) == 1:
             self.info_label.setText("")
             self._on_device_changed(devices[0])

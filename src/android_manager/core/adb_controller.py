@@ -102,7 +102,9 @@ class AdbController:
                            error_callback=None) -> None:
         """Enable or disable package"""
         if not self.validate_package_name(package):
-            raise ValueError(f"Invalid package name: {package}")
+            if error_callback:
+                error_callback(f"Invalid package name: {package}")
+            return
         
         pm_action = "disable-user" if action == "disable" else "enable"
         
@@ -120,7 +122,9 @@ class AdbController:
                          error_callback=None) -> None:
         """Uninstall package"""
         if not self.validate_package_name(package):
-            raise ValueError(f"Invalid package name: {package}")
+            if error_callback:
+                error_callback(f"Invalid package name: {package}")
+            return
         
         worker = AdbWorker(self.get_adb_command(
             "-s", device, "shell", "pm", "uninstall",

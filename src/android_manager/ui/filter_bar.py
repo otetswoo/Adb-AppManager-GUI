@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import (
     QWidget, QHBoxLayout, QLineEdit, QComboBox
 )
 
+from ..utils.constants import STATUS_ENABLED, STATUS_DISABLED
+
 
 class FilterBar(QWidget):
     """Search and filter controls"""
@@ -16,7 +18,7 @@ class FilterBar(QWidget):
         self._setup_ui()
         
         # Debounce timer for search input
-        self.search_timer = QTimer()
+        self.search_timer = QTimer(parent=self)
         self.search_timer.setSingleShot(True)
         self.search_timer.timeout.connect(self.filter_changed.emit)
     
@@ -74,10 +76,10 @@ class FilterBar(QWidget):
             strings.get("status_all", "All statuses"), "all"
         )
         self.status_filter.addItem(
-            strings.get("stat_en", "Enabled"), "Enabled"
+            strings.get("stat_en", STATUS_ENABLED), STATUS_ENABLED
         )
         self.status_filter.addItem(
-            strings.get("stat_dis", "Disabled"), "Disabled"
+            strings.get("stat_dis", STATUS_DISABLED), STATUS_DISABLED
         )
         self.status_filter.blockSignals(False)
     

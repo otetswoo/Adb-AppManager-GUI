@@ -1,7 +1,7 @@
 """Main application window"""
 
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QProgressBar, QFileDialog,
@@ -52,6 +52,13 @@ class MainWindow(QMainWindow):
     def _setup_ui(self):
         """Initialize all UI components"""
         self.setWindowTitle("Android App Manager")
+        
+        # Set application icon
+        import os
+        icon_path = os.path.join(os.path.dirname(__file__), "Adb-appmanager-icon.jpg")
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+        
         self.resize(1100, 750)
         
         # Central widget
@@ -263,6 +270,8 @@ class MainWindow(QMainWindow):
     
     def _on_device_changed(self, device_id: str):
         """Handle device selection change"""
+        if not device_id:  # Empty device ID means no device selected
+            return
         self._load_device_info()
         self.load_packages()
     

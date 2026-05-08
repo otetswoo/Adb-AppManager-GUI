@@ -1,36 +1,94 @@
+```
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-*.egg-info/
-dist/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.ENV
+.ENV.*
+.venv.bak/
+.python-version
+.mypy_cache/
+.pytest_cache/
+.coverage
+coverage/
+
+# Distribution / packaging
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
 eggs/
 .eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-env/
-ENV/
+# System
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Icon?
+iTunes_Control/
+*.laccdb
+Lost+Found/
+
+# Logs
+*.log
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
+*.tmp
 
-# OS
-.DS_Store
-Thumbs.db
+# Environment
+.env
+.env.local
+*.env
+*.env.*
 
-# Project specific
-*.log
-config.json
-user_data.json
+# Coverage
+coverage/
+htmlcov/
 
-# Qt
-*.qmlc
-*.jsc
+# Compressed
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+```

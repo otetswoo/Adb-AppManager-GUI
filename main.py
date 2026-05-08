@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtWidgets import (
     QApplication,
     QFileDialog,
@@ -177,7 +177,7 @@ class AndroidAppManager(QMainWindow):
         self.uad_info = {}
         self.packages_buffer = {}
 
-        self.search_timer = QTimer()
+        self.search_timer = QTimer(parent=self)
         self.search_timer.setSingleShot(True)
         self.search_timer.timeout.connect(self.apply_filters)
 
@@ -190,6 +190,12 @@ class AndroidAppManager(QMainWindow):
 
     def setup_ui(self):
         self.setWindowTitle("Android App Manager")
+        
+        # Set application icon
+        icon_path = os.path.join(os.path.dirname(__file__), "src", "android_manager", "ui", "Adb-appmanager-icon.jpg")
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+        
         self.resize(1100, 750)
 
         central = QWidget()

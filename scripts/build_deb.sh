@@ -33,6 +33,11 @@ if [ -f "data/uad_lists.json" ]; then
     cp data/uad_lists.json "${INSTALL_DIR}/android_manager/data/"
 fi
 
+# Copy icon file
+if [ -f "src/android_manager/ui/Adb-appmanager-icon.jpg" ]; then
+    cp src/android_manager/ui/Adb-appmanager-icon.jpg "${INSTALL_DIR}/"
+fi
+
 # Create launcher
 cat > "${INSTALL_DIR}/run.sh" << 'EOF'
 #!/bin/bash
