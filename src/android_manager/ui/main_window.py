@@ -53,9 +53,11 @@ class MainWindow(QMainWindow):
         """Initialize all UI components"""
         self.setWindowTitle("Android App Manager")
         
-        # Set application icon
+        # Set application icon (use PNG for better compatibility)
         import os
-        icon_path = os.path.join(os.path.dirname(__file__), "Adb-appmanager-icon.jpg")
+        icon_path = os.path.join(os.path.dirname(__file__), "Adb-appmanager-icon.png")
+        if not os.path.exists(icon_path):
+            icon_path = os.path.join(os.path.dirname(__file__), "Adb-appmanager-icon.jpg")
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
         
