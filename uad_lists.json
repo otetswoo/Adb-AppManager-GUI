@@ -21598,5 +21598,1265 @@
     "neededBy": [],
     "labels": [],
     "removal": "Advanced"
+  },
+  {
+    "id": "com.oplus.virtualcomm",
+    "description": "Oplus virtual communication service used for cross-device and ecosystem features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.providers.media.module",
+    "description": "Android Media Provider Mainline module responsible for media indexing and MediaStore APIs.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.framework_bluetooth.overlay",
+    "description": "Oplus Bluetooth framework overlay package containing vendor-specific Bluetooth resources.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "ru.yandex.music",
+    "description": "Yandex Music streaming application with music, podcasts and offline playback.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.elasticrock.keepscreenon",
+    "description": "Utility app that prevents the screen from turning off automatically.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "zed.rainxch.githubstore",
+    "description": "Third-party client for browsing and downloading GitHub releases.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.atlas",
+    "description": "Oplus resource optimization and performance management service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.overlay.modules.permissioncontroller.forframework",
+    "description": "Google overlay package for Permission Controller framework integration.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.mediatek.MtkSettingsResOverlay",
+    "description": "MediaTek settings resource overlay package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.exserviceui",
+    "description": "Oplus extended system service UI component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.coloros.ocs.opencapabilityservice",
+    "description": "ColorOS Open Capability Service for Oppo ecosystem integration.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.vrem.wifianalyzer",
+    "description": "WiFi Analyzer application for wireless network diagnostics.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.android.overlay.modules.documentsui",
+    "description": "Oplus overlay resources for Android DocumentsUI module.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.calllogbackup",
+    "description": "Android component responsible for call history backup and restore.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.carrierconfig.overlay",
+    "description": "Carrier configuration overlay package for Android telephony services.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.wifi.mainline.resources.overlay",
+    "description": "Overlay resources for Android Wi-Fi Mainline module.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.github.android",
+    "description": "Official GitHub Android application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.systemui.accessibility.accessibilitymenu",
+    "description": "Android accessibility menu service for simplified device navigation.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.overlay.gmsconfig.comms",
+    "description": "Google Mobile Services communications configuration overlay.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.providers.contacts",
+    "description": "Android contacts provider responsible for storing and syncing contacts.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.apps.nbu.files",
+    "description": "Files by Google application for file management and cleanup.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.companiondevicemanager",
+    "description": "Android Companion Device Manager for pairing and managing connected devices.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.cts.priv.ctsshim",
+    "description": "Android CTS shim package used for compatibility testing.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.calendar",
+    "description": "Google Calendar application for scheduling and reminders.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.launcher",
+    "description": "Default Android launcher responsible for home screen and app drawer.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.mms.service",
+    "description": "Android MMS service handling multimedia messaging operations.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.cellbroadcastreceiver",
+    "description": "Google emergency alert and cell broadcast receiver service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.daemon.shelper",
+    "description": "Vendor helper daemon service used by OEM background processes.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.bluetoothmidiservice",
+    "description": "Android Bluetooth MIDI service for musical instrument connectivity.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.credentialmanager",
+    "description": "Android Credential Manager for passkeys and authentication storage.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.photopicker",
+    "description": "Google Photo Picker module for secure media selection.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.networkstack.overlay",
+    "description": "Overlay resources for Android Network Stack module.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.printservice.recommendation",
+    "description": "Google Print Service recommendation provider.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.networkstack",
+    "description": "Android Network Stack Mainline module managing networking components.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "oplus",
+    "description": "Core Oplus system framework package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.systemui.overlay.fingerprint.anim.ccyh",
+    "description": "Fingerprint animation overlay resources for SystemUI.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.keychain",
+    "description": "Android KeyChain service for certificate and credential management.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.accessibility.switchaccess",
+    "description": "Google accessibility service enabling switch-based device control.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.overlay.gmsconfig.asi",
+    "description": "Google configuration overlay for Adaptive System Intelligence services.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "android.frameworkres.overlay.Network",
+    "description": "Android framework overlay for network-related resources.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.stdsp",
+    "description": "Oplus system component related to device service platform features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "org.torproject.torbrowser",
+    "description": "Tor Browser for anonymous and privacy-focused web browsing.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.apps.wellbeing",
+    "description": "Digital Wellbeing application for screen time and focus management.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.virtualmachine.res",
+    "description": "Android virtualization framework resource package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.shell",
+    "description": "Android shell package providing adb shell functionality.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.heytap.market",
+    "description": "HeyTap/Oppo application marketplace.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.adservices.api",
+    "description": "Google Privacy Sandbox and AdServices API module.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.wifi.dialog",
+    "description": "Google Wi-Fi dialog component for wireless connection prompts.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.eyeprotect",
+    "description": "Oplus eye comfort and blue light protection service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.mediatek.atci.service",
+    "description": "MediaTek AT command interface service used for diagnostics and modem communication.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.ocloud",
+    "description": "Oplus cloud synchronization and backup service.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.inputdevices",
+    "description": "Android system service responsible for managing hardware input devices.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.appsearch.apk",
+    "description": "Google AppSearch module providing on-device indexing and search APIs.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "ru.yandex.disk",
+    "description": "Yandex Disk cloud storage application with synchronization and file backup.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.ondevicepersonalization.services",
+    "description": "Google on-device personalization service for private recommendation and advertising features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.securitykeyboard",
+    "description": "Oplus secure keyboard service used for protected input in sensitive applications.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.mediatek.FrameworkResOverlayExt",
+    "description": "MediaTek framework resource overlay extension package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.onetimeinitializer",
+    "description": "Google initialization component executed during first boot or setup.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.permissioncontroller",
+    "description": "Android Permission Controller Mainline module managing runtime permissions.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "eu.faircode.email",
+    "description": "FairEmail open-source privacy-focused email client.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.sharedstoragebackup",
+    "description": "Android backup transport for shared storage data.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.mediatek.SettingsProviderResOverlay",
+    "description": "MediaTek overlay resources for Android Settings Provider.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.providers.media",
+    "description": "Android Media Provider responsible for managing media database and storage indexing.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.providers.calendar",
+    "description": "Android calendar provider service for storing and syncing calendar events.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.engineernetwork",
+    "description": "Oplus engineering network diagnostic and testing component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.incallui",
+    "description": "Android in-call user interface for phone calls.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.providers.blockednumber",
+    "description": "Android provider for blocked phone numbers and spam call management.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.documentsui",
+    "description": "Google file picker and document management interface.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.yandex.yandexmaps",
+    "description": "Yandex Maps navigation and mapping application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.statementservice",
+    "description": "Android service used for verifying web domain and app associations.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.cellbroadcastreceiver.overlay",
+    "description": "Overlay resources for Google Cell Broadcast Receiver.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.bluetooth.oplus.overlay",
+    "description": "Oplus overlay resources for Android Bluetooth services.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.systemui.overlay.fingerprint.anim.lgsy",
+    "description": "Fingerprint animation overlay package for Android SystemUI.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.vendors.bridge.softsim",
+    "description": "Vendor bridge service related to virtual SIM or soft SIM functionality.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.overlay.modules.documentsui",
+    "description": "Google overlay resources for Android DocumentsUI module.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.xiaomi.smarthome",
+    "description": "Xiaomi Mi Home application for managing smart home devices.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.mediatek.lbs.em2.ui",
+    "description": "MediaTek location-based services engineering mode interface.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.proxyhandler",
+    "description": "Android proxy configuration and handling component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.systemui.overlay.fingerprint.anim.nlgs",
+    "description": "Fingerprint animation overlay resources for Android SystemUI.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.overlay.modules.permissioncontroller",
+    "description": "Overlay package for Android Permission Controller resources.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.uiengine",
+    "description": "Oplus user interface rendering and enhancement engine.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.mediatek",
+    "description": "Core MediaTek framework and vendor support package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.ota",
+    "description": "Oplus over-the-air update service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.coloros.scenemode",
+    "description": "ColorOS scene mode optimization service for performance and power profiles.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.managedprovisioning",
+    "description": "Android enterprise and managed device provisioning service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.nas",
+    "description": "Oplus network-attached storage integration service.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.mediatek.omacp",
+    "description": "MediaTek OMA Client Provisioning service for carrier configuration.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.pyaterochka.app.browser",
+    "description": "Pyaterochka retail and shopping application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.trafficmonitor",
+    "description": "Oplus network traffic and data usage monitoring service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "md.obsidian",
+    "description": "Obsidian knowledge base and markdown note-taking application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.microsoftsdk.crossdeviceservicebroker",
+    "description": "Microsoft cross-device service broker for device synchronization features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.carrierdefaultapp",
+    "description": "Default Android carrier application placeholder package.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.nearme.instant.platform",
+    "description": "NearMe instant application platform used by Oppo/Realme services.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.example.barcodescanner",
+    "description": "Barcode scanner application or sample package.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.backupconfirm",
+    "description": "Android confirmation interface for adb backup and restore operations.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.yourok.torrserve",
+    "description": "TorrServe streaming server client for torrent-based media playback.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.hotspot2.osulogin",
+    "description": "Google Hotspot 2.0 Online Sign-Up login component for Wi-Fi networks.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.nfc",
+    "description": "Android NFC service responsible for near-field communication features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.healthservice",
+    "description": "Oplus health and fitness service component.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.deskclock",
+    "description": "Google Clock application with alarms, timers and stopwatch.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.mtp",
+    "description": "Android Media Transfer Protocol service for USB file transfers.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.gsf",
+    "description": "Google Services Framework providing core Google account and synchronization services.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "ru.aterlux.guitartuner",
+    "description": "Guitar tuner application for tuning musical instruments.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.appplatform",
+    "description": "Oplus application platform service used by system and ecosystem applications.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.deepthinker",
+    "description": "Oplus AI and behavior analysis engine used for smart optimization features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.safetycenter.resources.overlay",
+    "description": "Overlay resources for Android Safety Center.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.internal.display.cutout.emulation.double",
+    "description": "Android display cutout emulation profile with dual cutout layout.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.maxmpz.audioplayer",
+    "description": "Poweramp advanced audio player application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.theme.font.notoserifsource",
+    "description": "Noto Serif font package for Android themes.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.mediatek.frameworkresoverlay",
+    "description": "MediaTek framework resource overlay package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.chordai",
+    "description": "Chord ai application for automatic music chord recognition.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "app.revanced.android.youtube",
+    "description": "Modified YouTube client distributed through ReVanced.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.linker",
+    "description": "Oplus device linking and ecosystem connectivity service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.brent.nova",
+    "description": "Nova Launcher alternative Android home screen application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "android.connectivity.base.overlay",
+    "description": "Android connectivity framework overlay resources.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.health.connect.backuprestore",
+    "description": "Backup and restore component for Google Health Connect.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.linenew.stat",
+    "description": "Statistics or utility application developed by Linenew.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.notificationmanager",
+    "description": "Oplus notification management and optimization service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.cellbroadcastservice.overlay",
+    "description": "Overlay resources for Google Cell Broadcast Service.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.gesture",
+    "description": "Oplus gesture control and navigation service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.github.andreyasadchy.xtra",
+    "description": "Xtra Twitch client application with privacy-oriented features.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.ted.number",
+    "description": "Caller ID and spam blocking application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.athena",
+    "description": "Oplus process and memory management service responsible for app optimization.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.location",
+    "description": "Oplus location and positioning service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.engineermode",
+    "description": "Oplus engineering mode and hardware testing utility.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.systemui",
+    "description": "Core Android SystemUI package handling status bar, notifications and navigation.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.ar.core",
+    "description": "Google Play Services for AR providing augmented reality functionality.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.wifi.system.resources.overlay",
+    "description": "Overlay resources for Android Wi-Fi system components.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.internal.systemui.navbar.gestural",
+    "description": "Android gesture navigation bar configuration package.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.role.notes.enabled",
+    "description": "Android role configuration enabling default notes application support.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.pay",
+    "description": "Oplus payment and wallet service.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.mainline.adservices",
+    "description": "Google Mainline AdServices module for Privacy Sandbox functionality.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.calculator",
+    "description": "Google Calculator application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.settings.intelligence",
+    "description": "Android Settings Intelligence service providing smart suggestions and indexing.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "net.waterfox.android.release",
+    "description": "Waterfox privacy-focused web browser for Android.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.fido.fido2client",
+    "description": "FIDO2 authentication client for passwordless and hardware-backed login.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.domopult.mosobleirc.android",
+    "description": "Domopult application for housing and utility management services.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.android.overlay.gmsconfig.common",
+    "description": "Oplus overlay resources for Google Mobile Services configuration.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.looker.droidify",
+    "description": "Droid-ify F-Droid client with modern interface and repository management.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.locationproxy",
+    "description": "Oplus proxy service for location-related APIs and integrations.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.duolingo",
+    "description": "Duolingo language learning application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.systemui.overlay.fingerprint.anim.tyjw",
+    "description": "Fingerprint animation overlay resources for Android SystemUI.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.federatedcompute",
+    "description": "Google federated on-device computation service for private machine learning tasks.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.melody",
+    "description": "Oplus audio and ringtone management component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "org.mozilla.firefox",
+    "description": "Mozilla Firefox web browser for Android.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.webview",
+    "description": "Android System WebView component used to render web content inside applications.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.sdksandbox",
+    "description": "Google SDK Sandbox component for isolated third-party SDK execution.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "live.vkplay.app",
+    "description": "VK Play gaming and streaming platform application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.cellbroadcastservice",
+    "description": "Google emergency alert and broadcast messaging service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.easybrain.backgammon.board.games",
+    "description": "Backgammon mobile game application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.networkstack.overlay",
+    "description": "Overlay resources for Google Android Network Stack.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.internal.systemui.navbar.threebutton",
+    "description": "Android classic three-button navigation layout package.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.fns.lkfl",
+    "description": "Official Russian Federal Tax Service application for individual taxpayer accounts.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.localtransport",
+    "description": "Android local backup transport service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.lazycatsoftware.lmd",
+    "description": "LocalSend or LAN media/data sharing utility by LazyCat Software.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.carrierconfig.overlay.product.platform",
+    "description": "Carrier configuration overlay resources for Android platform products.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.systemui.overlay.fingerprint.anim.jslz",
+    "description": "Fingerprint animation overlay resources for Android SystemUI.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "android",
+    "description": "Core Android operating system framework package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.mediatek.telephony",
+    "description": "MediaTek telephony framework and modem integration package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.mediatek.cellbroadcastuiresoverlay",
+    "description": "MediaTek overlay resources for cell broadcast interface.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.connectivity.resources.overlay.oplus",
+    "description": "Google connectivity overlay resources customized for Oplus devices.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.overlay.modules.modulemetadata.forframework",
+    "description": "Overlay package for Android Module Metadata framework integration.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.wifi.resources.overlay.oplus",
+    "description": "Oplus overlay resources for Android Wi-Fi services.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "ru.vk.store",
+    "description": "VK Store application marketplace and digital content platform.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "vendor.mediatek.iwlanservice",
+    "description": "MediaTek IWLAN service for Wi-Fi calling and IMS data routing.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.secuso.privacyFriendlyCodeScanner",
+    "description": "Privacy Friendly QR and barcode scanner application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "net.typeblog.shelter",
+    "description": "Shelter application for managing Android work profiles and app isolation.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "android.frameworkres.overlay.display.product",
+    "description": "Android framework display resource overlay package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.packageinstaller",
+    "description": "Android package installer responsible for app installation and updates.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.se",
+    "description": "Android Secure Element service used for NFC and secure transactions.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.pacprocessor",
+    "description": "Android PAC proxy processing service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.wifi.resources.overlay",
+    "description": "Overlay resources for Android Wi-Fi framework.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.nrMode",
+    "description": "Oplus network mode configuration service related to 5G NR connectivity.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.sau",
+    "description": "Oplus system update service for firmware and component updates.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.coloros.soundrecorder",
+    "description": "ColorOS sound recorder application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.yandex.iot",
+    "description": "Yandex smart home and IoT device management application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.stdid",
+    "description": "Oplus device identifier and analytics component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.safetycenter.resources",
+    "description": "Google Safety Center resource package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.sauhelper",
+    "description": "Helper service for Oplus system update operations.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.securitypermission",
+    "description": "Oplus permission and security management service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.wirelesssettings",
+    "description": "Oplus wireless connectivity settings component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.aod",
+    "description": "Oplus Always-On Display service and interface.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.internal.display.cutout.emulation.hole",
+    "description": "Android display cutout emulation profile with hole-punch layout.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.settings",
+    "description": "Android system settings application.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.bips",
+    "description": "Built-in Android print service.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.nhs",
+    "description": "Oplus system health and hardware status service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.mediatek.engineermode",
+    "description": "MediaTek engineering mode utility for hardware diagnostics and testing.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.pinterest",
+    "description": "Pinterest social image sharing and inspiration platform.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.internal.systemui.navbar.gestural_narrow_back",
+    "description": "Android gesture navigation layout with narrow back gesture area.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.mediatek.miravision.ui",
+    "description": "MediaTek MiraVision display enhancement and color tuning interface.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.internal.display.cutout.emulation.tall",
+    "description": "Android display cutout emulation profile with tall notch layout.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.networkstack.tethering",
+    "description": "Google NetworkStack tethering module for hotspot and USB sharing.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.sberbankmobile",
+    "description": "SberBank mobile banking application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.postmanservice",
+    "description": "Oplus background message delivery and communication service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.cameraextensions",
+    "description": "Android Camera Extensions API package for advanced camera features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "app.marlboroadvance.mpvex",
+    "description": "MPV-based Android media player application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.networkstack.inprocess.overlay",
+    "description": "Overlay resources for in-process Android NetworkStack configuration.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.safecenter",
+    "description": "Oplus security center providing app protection and system cleanup features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.mts.mymts",
+    "description": "My MTS mobile operator self-service application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.coloros.securepay",
+    "description": "ColorOS secure payment protection service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.carrierconfig",
+    "description": "Android carrier configuration management service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.internal.systemui.navbar.gestural_wide_back",
+    "description": "Android gesture navigation layout with wide back gesture area.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.mes.journal.fgis",
+    "description": "Russian electronic school journal and education services application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.exsystemservice",
+    "description": "Oplus extended system service framework component.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.yandex.bank",
+    "description": "Yandex Bank financial services application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.mediatek.mt6789.gamedriver",
+    "description": "MediaTek MT6789 GPU game driver package.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.forpdateam.forpda",
+    "description": "4PDA forum client application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.google.android.ext.shared",
+    "description": "Google shared library package for Android extension modules.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.ryzerobotics.tello",
+    "description": "Official DJI Tello drone control application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.coloros.floatassistant",
+    "description": "ColorOS floating assistant and quick tools overlay service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.pag3dev.Sokoban",
+    "description": "Sokoban puzzle game application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.fido.uafclient",
+    "description": "FIDO UAF authentication client for biometric and passwordless authentication.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.ncloudtech.cloudoffice",
+    "description": "Cloud office and document collaboration application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "ru.mosmetro.metro",
+    "description": "Official Moscow Metro navigation and transport application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.onet",
+    "description": "Oplus network optimization and connectivity service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.compos.payload",
+    "description": "Android virtualization or compos payload package used by system components.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.kunzisoft.keepass.free",
+    "description": "KeePassDX open-source password manager.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.devicelockcontroller",
+    "description": "Android device lock management and enforcement service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.debug.loggerui",
+    "description": "Debug logging interface for vendor or engineering diagnostics.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.as",
+    "description": "Android System Intelligence package providing smart system features.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "android.auto_generated_rro_product__",
+    "description": "Auto-generated Android runtime resource overlay package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.olc",
+    "description": "Oplus lifecycle and optimization control service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.internal.systemui.navbar.transparent",
+    "description": "Android transparent navigation bar overlay configuration.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.inputmethod.latin",
+    "description": "Gboard Google keyboard application.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.wallpapers",
+    "description": "Oplus wallpapers and theme resources application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.networkstack.tethering.overlay",
+    "description": "Overlay resources for Android tethering services.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.wifi.resources",
+    "description": "Google Wi-Fi framework resource package.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.ons",
+    "description": "Android Opportunistic Network Service related to eSIM and carrier switching.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.networkstack.tethering.overlay",
+    "description": "Google overlay resources for Android tethering module.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.healthconnect.controller",
+    "description": "Google Health Connect management and synchronization interface.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.oplus.screenshot",
+    "description": "Oplus screenshot capture and editing utility.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.intentresolver",
+    "description": "Android intent resolver responsible for app selection dialogs.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.contactkeys",
+    "description": "Google contact key verification service for secure messaging.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.certinstaller",
+    "description": "Android certificate installer for VPN and security certificates.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.eid",
+    "description": "Oplus electronic identity and authentication service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "io.github.romanvht.byedpi",
+    "description": "ByeDPI utility for bypassing DPI-based network restrictions.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.nutomic.syncthingandroid",
+    "description": "Syncthing Android client for decentralized file synchronization.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.android.wifi.system.mainline.resources.overlay",
+    "description": "Overlay resources for Android Wi-Fi Mainline system module.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.google.android.setupwizard",
+    "description": "Google Android setup wizard used during initial device configuration.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.wifibackuprestore",
+    "description": "Oplus Wi-Fi configuration backup and restore service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.apps.restore",
+    "description": "Google restore application for migrating apps and device data.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "ru.rzd.pass",
+    "description": "Russian Railways ticket booking and travel application.",
+    "removal": "Recommended"
+  },
+  {
+    "id": "com.coloros.gallery3d",
+    "description": "ColorOS gallery and photo management application.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.google.android.permissioncontroller.overlay.oplus",
+    "description": "Oplus overlay resources for Android Permission Controller.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.oplus.interconnectcollectkit",
+    "description": "Oplus interconnect analytics and device interaction toolkit.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.systemui.overlay.fingerprint.anim.jhsy",
+    "description": "Fingerprint animation overlay resources for Android SystemUI.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.coloros.lockassistant",
+    "description": "ColorOS lock screen assistant and smart lock service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.encryption",
+    "description": "Oplus encryption and security framework service.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.simappdialog",
+    "description": "Android SIM application dialog interface.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.oplus.blacklistapp",
+    "description": "Oplus blacklist and spam protection service.",
+    "removal": "Conditional"
+  },
+  {
+    "id": "com.android.providers.telephony",
+    "description": "Android telephony provider managing SMS, MMS and carrier data.",
+    "removal": "Not Recommended"
+  },
+  {
+    "id": "com.android.wallpaper.livepicker",
+    "description": "Android live wallpaper picker application.",
+    "removal": "Recommended"
   }
 ]
