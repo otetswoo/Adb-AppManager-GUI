@@ -25,6 +25,7 @@ class UADLoader:
         # Try multiple possible locations for the data file
         possible_paths = [
             Path(__file__).parent / "uad_lists.json",
+            Path(__file__).parent.parent.parent.parent / "uad_lists.json",  # Project root
             Path("data") / "uad_lists.json",
             Path.home() / ".local" / "share" / "android-manager" / "uad_lists.json",
         ]

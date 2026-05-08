@@ -14,6 +14,7 @@ from typing import List, Optional
 from ..core.adb_controller import PackageInfo
 from ..utils.themes import THEMES
 from ..utils.i18n import STRINGS
+from ..utils.constants import STATUS_ENABLED, STATUS_DISABLED
 
 
 class PackageTable(QTableWidget):
@@ -81,12 +82,12 @@ class PackageTable(QTableWidget):
             # Set colors
             status_color = (
                 self._theme["green"] 
-                if package.status == "Enabled" 
+                if package.status == STATUS_ENABLED
                 else self._theme["red"]
             )
             row_color = QColor(
                 self._theme["row_disabled"] 
-                if package.status == "Disabled" 
+                if package.status == STATUS_DISABLED
                 else self._theme["row_enabled"]
             )
             
@@ -98,9 +99,9 @@ class PackageTable(QTableWidget):
     
     def _get_status_text(self, status: str) -> str:
         """Get localized status text"""
-        if status == "Enabled":
-            return self._strings.get("stat_en", "Enabled")
-        return self._strings.get("stat_dis", "Disabled")
+        if status == STATUS_ENABLED:
+            return self._strings.get("stat_en", STATUS_ENABLED)
+        return self._strings.get("stat_dis", STATUS_DISABLED)
     
     def _get_type_text(self, app_type: str) -> str:
         """Get localized type text"""
