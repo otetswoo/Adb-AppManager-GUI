@@ -1,8 +1,8 @@
 # Android App Manager
 
-GUI приложение для управления Android-приложениями через ADB.
+GUI приложение для управления Android приложениями через ADB.
 
-🇬🇧 Forked from [mehran-mousavi/Adb-AppManager-GUI](https://github.com/mehran-mousavi/Adb-AppManager-GUI)
+## Запуск приложения
 
 🇷🇺 Форк проекта [mehran-mousavi/Adb-AppManager-GUI](https://github.com/mehran-mousavi/Adb-AppManager-GUI)
 
@@ -28,10 +28,7 @@ GUI приложение для управления Android-приложени�
 
 ### Из исходников
 ```bash
-git clone https://github.com/otetswoo/Adb-AppManager-GUI
-cd android-app-manager
-pip install -r requirements.txt
-python src/android_manager/main.py
+python main.py
 ```
 ![Preview](preview_v2.png)
 
@@ -50,6 +47,10 @@ Android App Manager is a Python-based GUI application that allows users to manag
 - 🌍 Support for Russian and English
 - 📊 Integration with Universal Android Debloater lists
 
+### Способ 2: Через скрипт run.sh
+```bash
+./run.sh
+```
 
 ## Requirements
 
@@ -59,24 +60,43 @@ Android App Manager is a Python-based GUI application that allows users to manag
 
 ## Usage
 
-1. Connect your Android device to your computer.
-2. Enable USB debugging on your Android device.
-3. Run the script.
+## Установка зависимостей
 
 The application will start and display a GUI to manage your Android applications.
 
 ## Note
 
-This tool uses ADB commands to manage applications. Please ensure you understand the implications of disabling/enabling applications on your Android device. Always use this tool responsibly.
+- `src/android_manager/` - основной код приложения (модульная версия)
+  - `main.py` - точка входа
+  - `ui/` - интерфейс пользователя
+  - `core/` - ядро (ADB контроллер)
+  - `utils/` - утилиты, константы, локализация
+  - `data/` - загрузчики данных
+- `scripts/` - скрипты сборки (DEB, RPM)
+- `tests/` - тесты
 
-## Contributing
+## Возможности
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+- Просмотр списка установленных приложений
+- Включение/отключение приложений
+- Удаление приложений
+- Экспорт APK файлов с устройства
+- Установка APK файлов
+- Пакетное отключение приложений
+- Фильтрация по типу и статусу
+- Поиск по имени пакета
+- Поддержка русского и английского языков
+- Тёмная и светлая темы
 
-## License
+## Сборка пакетов
 
-[MIT](https://choosealicense.com/licenses/mit/)
+```bash
+# Сборка DEB
+./scripts/build_deb.sh
 
-## Disclaimer
+# Сборка RPM
+./scripts/build_rpm.sh
 
-This tool is for educational purposes only. The developer is not responsible for any misuse of this tool.
+# Сборка всех пакетов
+./scripts/build_all.sh
+```
